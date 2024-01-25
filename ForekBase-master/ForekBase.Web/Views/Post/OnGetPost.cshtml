@@ -150,6 +150,10 @@
                                     <!-- Image Upload Box -->
                                     <div class="card">
                                         <div class="card-body">
+                                            <h5 class="card-title">Category</h5>
+                                            <select asp-for="Category" class="form-control Type" required asp-items="Html.GetEnumSelectList<eCategory>()">
+                                                <option selected="selected" disabled value="">--Select--</option>
+                                            </select>
                                             <!-- Text Boxes for Story -->
                                             <input type="text" asp-for="Title" class="form-control mb-2" placeholder="News Title">
                                             <textarea asp-for="Description" class="form-control" placeholder="Enter your news story" rows="10" cols="100"></textarea>

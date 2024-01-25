@@ -27,6 +27,8 @@
     <None Include="wwwroot\Theme\js\custom.js" />
     <None Include="wwwroot\Theme\js\jquery.min.js" />
     <None Include="wwwroot\Theme\js\jquery.sticky.js" />
+    <None Include="wwwroot\utility\assets\css\RichText\Style.css" />
+    <None Include="wwwroot\utility\assets\js\RichText\Index.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="wwwroot\Docs\" />

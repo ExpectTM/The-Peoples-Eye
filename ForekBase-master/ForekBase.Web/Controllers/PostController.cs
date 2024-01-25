@@ -69,7 +69,9 @@ namespace ForekBase.Web.Controllers
         {
             Post? post = _unitOfWork.Post.Get(u => u.PostId == PostId);
 
-            PostVM postVM = new()
+            var posts = _unitOfWork.Post.GetAll();
+
+            var allPosts = posts.Select(post => new Post
             {
                 PostId = post.PostId,
                 CreatedOn = post.CreatedOn,
@@ -81,6 +83,22 @@ namespace ForekBase.Web.Controllers
                 ModifiedBy = post.ModifiedBy,
                 IsActive = post.IsActive,
                 Category = post.Category
+
+            }).ToList() ?? new List<Post>();
+
+            PostVM postVM = new()
+            {
+                PostId = post.PostId,
+                CreatedOn = post.CreatedOn,
+                Description = post.Description,
+                Title = post.Title,
+                PostPicture = post.PostPicture,
+                ModifiedOn = post.ModifiedOn,
+                CreatedBy = post.CreatedBy,
+                ModifiedBy = post.ModifiedBy,
+                IsActive = post.IsActive,
+                Category = post.Category,
+                AllPosts = allPosts,
             };
 
             if (ModelState.IsValid)
@@ -100,12 +118,12 @@ namespace ForekBase.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> OnCreatePost(PostVM postVM)
         {
-            var picture = await UploadFile(postVM);
+            //var picture = await UploadFile(postVM);
 
-            if (picture == null || picture.PostPicture == null)
-            {
-                return BadRequest("Invalid picture data");
-            }
+            //if (picture == null || picture.PostPicture == null)
+            //{
+            //    return BadRequest("Invalid picture data");
+            //}
 
             Post? post = new()
             {
@@ -114,7 +132,7 @@ namespace ForekBase.Web.Controllers
                 Description = postVM.Description,
                 CreatedBy = "Admin",
                 CreatedOn = DateTime.Now,
-                PostPicture = picture.PostPicture,
+                //PostPicture = picture.PostPicture,
                 IsActive = true,
                 Category = postVM.Category
             };
@@ -164,7 +182,7 @@ namespace ForekBase.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdatePost(PostVM postVM)
         {
-            var doc = await UploadFile(postVM);
+            //var doc = await UploadFile(postVM);
             
             Post post = new() 
             {
@@ -175,7 +193,7 @@ namespace ForekBase.Web.Controllers
                 ModifiedOn = DateTime.Now,
                 IsActive = true,
                 Category = postVM.Category,
-                PostPicture = doc.PostPicture
+                //PostPicture = doc.PostPicture
             };
 
             if (ModelState.IsValid)
@@ -192,29 +210,29 @@ namespace ForekBase.Web.Controllers
             return View();
         }
 
-        private async Task<Post> UploadFile(PostVM supportDocs)
-        {
-            var teamPhoto = supportDocs.LogoDoc;
+        //private async Task<Post> UploadFile(PostVM supportDocs)
+        //{
+        //    var teamPhoto = supportDocs.LogoDoc;
 
-            if (teamPhoto != null)
-            {
-                //var fileContent = supportDocs.LogoDoc.OpenReadStream();
+        //    if (teamPhoto != null)
+        //    {
+        //        //var fileContent = supportDocs.LogoDoc.OpenReadStream();
 
-                supportDocs.PostPicture = supportDocs.LogoDoc.FileName;
+        //        supportDocs.PostPicture = supportDocs.LogoDoc.FileName;
 
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Docs", supportDocs.PostPicture);
+        //        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Docs", supportDocs.PostPicture);
 
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    supportDocs.LogoDoc.CopyTo(stream);
-                }
-            }
+        //        using (var stream = new FileStream(filePath, FileMode.Create))
+        //        {
+        //            supportDocs.LogoDoc.CopyTo(stream);
+        //        }
+        //    }
 
-            return new Post
-            {
-                PostPicture = supportDocs.PostPicture
-            };
-        }
+        //    return new Post
+        //    {
+        //        PostPicture = supportDocs.PostPicture
+        //    };
+        //}
 
         public async Task<string> UploadFiles(IFormFileCollection files)
         {

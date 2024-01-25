@@ -3,6 +3,7 @@ using ForekBase.Domain.Entities;
 using ForekBase.Web.Models;
 using ForekBase.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using System.Diagnostics;
 
 namespace ForekBase.Web.Controllers
@@ -20,28 +21,34 @@ namespace ForekBase.Web.Controllers
 
         public IActionResult Index()
         {
-            IEnumerable<Post> posts = _unitOfWork.Post.GetAll();
+            var posts = _unitOfWork.Post.GetAll();
 
-            var postVms = new List<PostVM>();
-
-            foreach (Post post in posts)
+            var allPosts = posts.Select(post => new Post
             {
-                PostVM postVM = new()
-                {
-                    CreatedBy = post.CreatedBy,
-                    CreatedOn = post.CreatedOn,
-                    ModifiedBy = post.ModifiedBy,
-                    ModifiedOn = post.ModifiedOn,
-                    Title = post.Title,
-                    Description = post.Description,
-                    IsActive = post.IsActive,
-                    PostId = post.PostId,
-                    Category = post.Category,
-                    PostPicture = post.PostPicture
-                };
-                postVms.Add(postVM);
+                PostId = post.PostId,
+                CreatedOn = post.CreatedOn,
+                Description = post.Description,
+                Title = post.Title,
+                PostPicture = post.PostPicture,
+                ModifiedOn = post.ModifiedOn,
+                CreatedBy = post.CreatedBy,
+                ModifiedBy = post.ModifiedBy,
+                IsActive = post.IsActive,
+                Category = post.Category
+
+            }).ToList() ?? new List<Post>();
+
+            PostVM postVM = new()
+            {
+                AllPosts = allPosts,
+            };
+
+            if (ModelState.IsValid)
+            {
+                return View(postVM);
             }
-            return View(postVms);
+
+            return View();
         }
 
         public IActionResult ContactUs()

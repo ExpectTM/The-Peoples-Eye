@@ -2,6 +2,7 @@
 @using ForekBase.Domain.Entities.Enums
 
 
+
 <section id="newsSection">
 
     <div class="row">
@@ -9,7 +10,10 @@
             <div class="latest_newsarea">
                 <span>Latest News</span>
                 <ul id="ticker01" class="news_sticker">
-                    <li><a href="#"><img src="~/Docs/@Model.PostPicture" alt="">@Model.Title</a></li>
+                @foreach(var post in Model.AllPosts)
+                {
+                  <li><a href="#"><img src="~/Docs/@post.PostPicture" alt="">@post.Title</a></li>   
+                }
                 </ul>
                 <div class="social_area">
                     <ul class="social_nav">
@@ -28,18 +32,18 @@
             <div class="left_content">
                 <div class="single_page">
                     <ol class="breadcrumb">
-                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../">Home</a></li>
                         <li><a href="#">@Model.Category</a></li>
                         <li class="active"></li>
                     </ol>
-                    <h1><input type="text" asp-for="Title" class="form-control mb-2" readonly placeholder="News Title"></h1>
+                    <h1 >@Model.Title</h1>
                     <div class="post_commentbox"> <a href="#"><i class="fa fa-user"></i>@Model.CreatedBy</a> <span><i class="fa fa-calendar"></i>@Model.CreatedOn</span> <a href="#"><i class="fa fa-tags"></i>@Model.Category</a> </div>
                     <div class="single_page_content">
-                        <img id="output" src="~/Docs/@Model.PostPicture" />
-                        
-                        <textarea asp-for="Description" rows="10" cols="100"></textarea>
-                        
+                        <img class="slider_tittle" id="output" src="~/Docs/@Model.PostPicture" />
+                        <br />
+                        @Model.Description
                     </div>
+                    
                     <div class="social_link">
                         <ul class="sociallink_nav">
                             <li><a href="#"><i class="fa fa-facebook"></i></a></li>
@@ -201,3 +205,6 @@
         </div>
     </div>
 </section>
+
+
+

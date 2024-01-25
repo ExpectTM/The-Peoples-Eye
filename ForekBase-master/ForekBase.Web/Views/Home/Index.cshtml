@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ForekBase.Web.ViewModels.PostVM>
+﻿@model ForekBase.Web.ViewModels.PostVM
 @using ForekBase.Domain.Entities.Enums
 
 <section id="newsSection">
@@ -7,7 +7,7 @@
             <div class="latest_newsarea">
                 <span>Latest News</span>
                 <ul id="ticker01" class="news_sticker">
-                    @foreach (var post in Model)
+                    @foreach (var post in Model.AllPosts)
                     {
                         <li><a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = post.PostId})"><img src="~/Docs/@post.PostPicture" alt="">@post.Title</a></li>
                     }
@@ -26,13 +26,12 @@
     <div class="row">
         <div class="col-lg-8 col-md-8 col-sm-8">
             <div class="slick_slider">
-                @foreach (var story in Model)
+                @foreach (var story in Model.AllPosts)
                 {
                     <div class="single_iteam">
                         <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = story.PostId})"> <img src="~/Docs/@story.PostPicture" alt=""></a>
                         <div class="slider_article">
                             <h2><a class="slider_tittle" href="@Url.Action("OnGetPostPublic", "Post", new { PostId = story.PostId})">@story.Title</a></h2>
-                            <p>@story.Description</p>
                         </div>
                     </div>
                 }
@@ -42,24 +41,25 @@
             <div class="latest_post">
                 <h2><span>Latest posts</span></h2>
                 <div class="latest_post_container">
-                    <div id="prev-button"><i class="fa fa-chevron-up"></i></div>
-                    <ul class="latest_postnav">
+                    
+                    <ul>
                         <li>
-                            @if (Model.Any())
+                            @if (Model.AllPosts.Any())
                             {
-                                var latestPosts = Model.Take(5);
+                                var latestPosts = Model.AllPosts.Take(5);
 
-                                foreach (var latestPost in latestPosts)
+                                foreach (var latestpost in latestPosts)
                                 {
                                     <div class="media">
-                                        <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = latestPost.PostId })" class="media-left">
-                                            <img alt="" src="~/Docs/@latestPost.PostPicture">
+                                        <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = latestpost.PostId })" class="media-left">
+                                            <img alt="" src="~/Docs/@latestpost.PostPicture">
                                         </a>
 
                                         <div class="media-body">
-                                            <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = latestPost.PostId })" class="catg_title">@latestPost.Title</a>
+                                            <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = latestpost.PostId })" >@latestpost.Title</a>
                                         </div>
                                     </div>
+
                                 }
                             }
                             else
@@ -68,7 +68,7 @@
                             }
                         </li>
                     </ul>
-                    <div id="next-button"><i class="fa fa-chevron-down"></i></div>
+                    
                 </div>
             </div>
         </div>
@@ -82,46 +82,70 @@
         <div class="col-lg-8 col-md-8 col-sm-8">
             <div class="left_content">
                 <div class="single_post_content">
+                <h2><span>Ads</span></h2>
+                </div>
+                <div class="single_post_content">
                     <h2><span>Business</span></h2>
                     <div class="single_post_content_left">
                         <ul class="business_catgnav  wow fadeInDown">
                             <li>
-                                <figure class="bsbig_fig">
-                                    <a href="pages/single_page.html" class="featured_img"> <img alt="" src="~/utility/images/featured_img1.jpg"> <span class="overlay"></span> </a>
-                                    <figcaption> <a href="pages/single_page.html">Proin rhoncus consequat nisl eu ornare mauris</a> </figcaption>
-                                    <p>Nunc tincidunt, elit non cursus euismod, lacus augue ornare metus, egestas imperdiet nulla nisl quis mauris. Suspendisse a phare...</p>
-                                </figure>
+                                @{
+                                    var latestPost = Model.AllPosts.OrderByDescending(p => p.CreatedOn)
+                                    .FirstOrDefault(p => p.Category == eCategory.News);
+                                }
+
+                                @if (latestPost != null)
+                                {
+                                    <figure class="bsbig_fig">
+                                        <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = latestPost.PostId })" class="featured_img">
+                                            <img alt="" src="~/Docs/@latestPost.PostPicture"> <span class="overlay"></span>
+                                        </a>
+                                        <figcaption> <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = latestPost.PostId })">@latestPost.Title</a></figcaption>
+                                        <p>
+
+                                            @{
+                                                
+                                                var descriptionWords = latestPost.Description.Split(' ');
+
+                                                var shortenedDescription = string.Join(' ', descriptionWords.Take(30));
+
+                                                var finalDescription = $"{shortenedDescription}... See more";
+                                            }
+
+                                            <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = latestPost.PostId })">@finalDescription</a>
+
+                                        </p>
+                                    </figure>
+                                }
                             </li>
+                            
                         </ul>
                     </div>
                     <div class="single_post_content_right">
                         <ul class="spost_nav">
                             <li>
-                                <div class="media wow fadeInDown">
-                                    <a href="pages/single_page.html" class="media-left"> <img alt="" src="~/utility/images/post_img1.jpg"> </a>
-                                    <div class="media-body"> <a href="pages/single_page.html" class="catg_title"> Aliquam malesuada diam eget turpis varius 1</a> </div>
-                                </div>
+                                    @foreach (var item in Model.AllPosts.Take(4))
+                                    {
+                                        if (item.Category == eCategory.News)
+                                        {
+                                        <div class="media wow fadeInDown">
+                                            <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = item.PostId })" class="media-left">
+                                                    <img alt="" src="~/Docs/@item.PostPicture"> <span class="overlay"></span>
+                                            </a>
+
+                                            <div class="media-body"> <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = item.PostId })" class="catg_title">@item.Title</a></div>
+
+                                        </div>
+                                        }
+                                    }
+                                    ADS
                             </li>
-                            <li>
-                                <div class="media wow fadeInDown">
-                                    <a href="pages/single_page.html" class="media-left"> <img alt="" src="~/utility/images/post_img2.jpg"> </a>
-                                    <div class="media-body"> <a href="pages/single_page.html" class="catg_title"> Aliquam malesuada diam eget turpis varius 2</a> </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="media wow fadeInDown">
-                                    <a href="pages/single_page.html" class="media-left"> <img alt="" src="~/utility/images/post_img1.jpg"> </a>
-                                    <div class="media-body"> <a href="pages/single_page.html" class="catg_title"> Aliquam malesuada diam eget turpis varius 3</a> </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="media wow fadeInDown">
-                                    <a href="pages/single_page.html" class="media-left"> <img alt="" src="~/utility/images/post_img2.jpg"> </a>
-                                    <div class="media-body"> <a href="pages/single_page.html" class="catg_title"> Aliquam malesuada diam eget turpis varius 4</a> </div>
-                                </div>
-                            </li>
+                           
                         </ul>
                     </div>
+                </div>
+                <div class="single_post_content">
+                    <h2><span>Ads</span></h2>
                 </div>
                 <div class="fashion_technology_area">
                     <div class="fashion">
@@ -205,83 +229,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="single_post_content">
-                    <h2><span>Photography</span></h2>
-                    <ul class="photograph_nav  wow fadeInDown">
-                        <li>
-                            <div class="photo_grid">
-                                <figure class="effect-layla"> <a class="fancybox-buttons" data-fancybox-group="button" href="~/utility/images/photograph_img2.jpg" title="Photography Ttile 1"> <img src="images/photograph_img2.jpg" alt="" /></a> </figure>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="photo_grid">
-                                <figure class="effect-layla"> <a class="fancybox-buttons" data-fancybox-group="button" href="~/utility/images/photograph_img3.jpg" title="Photography Ttile 2"> <img src="images/photograph_img3.jpg" alt="" /> </a> </figure>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="photo_grid">
-                                <figure class="effect-layla"> <a class="fancybox-buttons" data-fancybox-group="button" href="~/utility/images/photograph_img4.jpg" title="Photography Ttile 3"> <img src="images/photograph_img4.jpg" alt="" /> </a> </figure>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="photo_grid">
-                                <figure class="effect-layla"> <a class="fancybox-buttons" data-fancybox-group="button" href="~/utility/images/photograph_img4.jpg" title="Photography Ttile 4"> <img src="images/photograph_img4.jpg" alt="" /> </a> </figure>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="photo_grid">
-                                <figure class="effect-layla"> <a class="fancybox-buttons" data-fancybox-group="button" href="~/utility/images/photograph_img2.jpg" title="Photography Ttile 5"> <img src="images/photograph_img2.jpg" alt="" /> </a> </figure>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="photo_grid">
-                                <figure class="effect-layla"> <a class="fancybox-buttons" data-fancybox-group="button" href="~/utility/images/photograph_img3.jpg" title="Photography Ttile 6"> <img src="images/photograph_img3.jpg" alt="" /> </a> </figure>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div class="single_post_content">
-                    <h2><span>Games</span></h2>
-                    <div class="single_post_content_left">
-                        <ul class="business_catgnav">
-                            <li>
-                                <figure class="bsbig_fig  wow fadeInDown">
-                                    <a class="featured_img" href="pages/single_page.html"> <img src="~/utility/images/featured_img1.jpg" alt=""> <span class="overlay"></span> </a>
-                                    <figcaption> <a href="pages/single_page.html">Proin rhoncus consequat nisl eu ornare mauris</a> </figcaption>
-                                    <p>Nunc tincidunt, elit non cursus euismod, lacus augue ornare metus, egestas imperdiet nulla nisl quis mauris. Suspendisse a phare...</p>
-                                </figure>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="single_post_content_right">
-                        <ul class="spost_nav">
-                            <li>
-                                <div class="media wow fadeInDown">
-                                    <a href="pages/single_page.html" class="media-left"> <img alt="" src="~/utility/images/post_img1.jpg"> </a>
-                                    <div class="media-body"> <a href="pages/single_page.html" class="catg_title"> Aliquam malesuada diam eget turpis varius 1</a> </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="media wow fadeInDown">
-                                    <a href="pages/single_page.html" class="media-left"> <img alt="" src="~/utility/images/post_img2.jpg"> </a>
-                                    <div class="media-body"> <a href="pages/single_page.html" class="catg_title"> Aliquam malesuada diam eget turpis varius 2</a> </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="media wow fadeInDown">
-                                    <a href="pages/single_page.html" class="media-left"> <img alt="" src="~/utility/images/post_img1.jpg"> </a>
-                                    <div class="media-body"> <a href="pages/single_page.html" class="catg_title"> Aliquam malesuada diam eget turpis varius 3</a> </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="media wow fadeInDown">
-                                    <a href="pages/single_page.html" class="media-left"> <img alt="" src="~/utility/images/post_img2.jpg"> </a>
-                                    <div class="media-body"> <a href="pages/single_page.html" class="catg_title"> Aliquam malesuada diam eget turpis varius 4</a> </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+                
             </div>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-4">
@@ -290,28 +238,40 @@
                     <h2><span>Popular Post</span></h2>
                     <ul class="spost_nav">
                         <li>
-                            <div class="media wow fadeInDown">
-                                <a href="pages/single_page.html" class="media-left"> <img alt="" src="~/utility/images/post_img1.jpg"> </a>
-                                <div class="media-body"> <a href="pages/single_page.html" class="catg_title"> Aliquam malesuada diam eget turpis varius 1</a> </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="media wow fadeInDown">
-                                <a href="pages/single_page.html" class="media-left"> <img alt="" src="~/utility/images/post_img2.jpg"> </a>
-                                <div class="media-body"> <a href="pages/single_page.html" class="catg_title"> Aliquam malesuada diam eget turpis varius 2</a> </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="media wow fadeInDown">
-                                <a href="pages/single_page.html" class="media-left"> <img alt="" src="~/utility/images/post_img1.jpg"> </a>
-                                <div class="media-body"> <a href="pages/single_page.html" class="catg_title"> Aliquam malesuada diam eget turpis varius 3</a> </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="media wow fadeInDown">
-                                <a href="pages/single_page.html" class="media-left"> <img alt="" src="~/utility/images/post_img2.jpg"> </a>
-                                <div class="media-body"> <a href="pages/single_page.html" class="catg_title"> Aliquam malesuada diam eget turpis varius 4</a> </div>
-                            </div>
+                                @if (Model.AllPosts.Any())
+                                {
+                                    var LatestPosts = Model.AllPosts.Take(5);
+
+                                    foreach (var latestPosts in LatestPosts)
+                                    {
+                                    <div class="media">
+                                        <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = latestPosts.PostId })" class="media-left">
+                                            <img alt="" src="~/Docs/@latestPosts.PostPicture">
+                                        </a>
+
+                                        <div>
+
+                                            @{
+                                                var titleWords = latestPosts.Title.Split(' ');
+
+                                                var shortenedTitle = string.Join(' ', titleWords.Take(3));
+
+                                                var finalTitle = $"{shortenedTitle}... See more";
+
+                                            }
+
+                                            <div class="media-body">
+                                                <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = latestPosts.PostId })">@latestPosts.Title</a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    }
+                                }
+                                else
+                                {
+                                <p>No posts available.</p>
+                                }
                         </li>
                     </ul>
                 </div>
@@ -390,6 +350,9 @@
                         <li><a href="#">Login</a></li>
                         <li><a href="#">Life &amp; Style</a></li>
                     </ul>
+                </div>
+                <div class="single_post_content">
+                    <h2><span>Ads</span></h2>
                 </div>
             </aside>
         </div>

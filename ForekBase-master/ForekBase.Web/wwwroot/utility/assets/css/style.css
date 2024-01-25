@@ -213,14 +213,45 @@ figure.effect-layla:hover figcaption::after, figure.effect-layla:hover h2, figur
 .pagination > li:first-child > a, .pagination > li:first-child > span{border-bottom-left-radius:0; border-top-left-radius:0}
 .pagination > li:last-child > a, .pagination > li:last-child > span{border-bottom-right-radius:0; border-top-right-radius:0}
 .single_page{float:left; display:inline; width:100%}
-.single_page > h1{color:#333; font-family:Oswald,arial,Georgia,serif; font-size:30px; line-height:1.4em; margin:10px 0 -10px; padding:0 0 4px; text-transform:uppercase}
+    .single_page > h1 {
+        color: #000;
+        width: 100%;
+        font-family: Oswald,arial,Georgia,serif;
+        font-size: 30px;
+        margin: 10px 0px -10px;
+        padding: 0 0 4px;
+        text-transform: uppercase;
+    }
 .post_commentbox{display:inline; float:left; width:100%; border-top:1px solid #ddd; border-bottom:1px solid #ddd; margin-top:20px; padding:5px 0px}
 .post_commentbox a, .post_commentbox span{color:#798992; font-size:11px; margin-right:5px}
 .post_commentbox a > i, .post_commentbox span > i{margin-right:5px}
-.breadcrumb{background-color:#303030; border-radius:0}
+.breadcrumb{background-color:#000; border-radius:0}
 .breadcrumb li a{color:#fff}
 .single_page_content{display:inline; float:left; padding-top:20px; width:100%; border-bottom:1px solid #ddd; padding-bottom:20px}
-.single_page_content > img{max-width:100%; width:320px; height:213px; margin-bottom:15px}
+    .single_page_content > img {
+        max-width: 100%;
+        width: 380px;
+        height: 223px;
+        margin: 0 auto;
+        display: block;
+    }
+textarea {
+    background: #eeeeee;
+    font-family: 'Arial', 'Georgia', serif;
+    color: black;
+    border: 1px solid #cccccc;
+    border-radius: 5px; 
+    padding: 10px; 
+    box-sizing: border-box;
+    resize: none;
+    outline: none; 
+    font-size: 16px; 
+    line-height: 1.5; 
+    width: 100%; 
+    height: 150px; 
+}
+
+
 .single_page_content ul{position:relative; padding-left:25px}
 .single_page_content ul li{line-height:25px}
 .single_page_content ul li:before{content:""; height:5px; left:5px; position:absolute; width:9px; margin-top:8px}

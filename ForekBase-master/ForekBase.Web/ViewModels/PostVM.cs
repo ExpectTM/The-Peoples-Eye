@@ -1,5 +1,7 @@
-﻿using ForekBase.Domain.Entities.Common;
+﻿using ForekBase.Domain.Entities;
+using ForekBase.Domain.Entities.Common;
 using ForekBase.Domain.Entities.Enums;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ForekBase.Web.ViewModels
@@ -11,7 +13,9 @@ namespace ForekBase.Web.ViewModels
         public string Description { get; set; }
         public string? PostPicture { get; set; }
         [NotMapped]
-        public IFormFile? LogoDoc { get; set; }
+        public Domain.Entities.IFormFile? LogoDoc { get; set; }
         public eCategory Category { get; set; }
+
+        public List<Post>? AllPosts { get; set; }
     }
 }

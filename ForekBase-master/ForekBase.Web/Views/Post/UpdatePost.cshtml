@@ -1,5 +1,5 @@
 ﻿@model ForekBase.Web.ViewModels.PostVM
-
+@using ForekBase.Domain.Entities.Enums
 
 @{
     Layout = null;
@@ -152,6 +152,10 @@
                                             <h5 class="card-title">Upload Image</h5>
                                             <!-- Your image upload form or input can go here -->
                                             <input asp-for="LogoDoc" accept="image/*,.pdf" type="file" class="form-control mb-2" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])" class="form-control" />
+                                            <h5 class="card-title">Category</h5>
+                                            <select asp-for="Category" class="form-control Type" required asp-items="Html.GetEnumSelectList<eCategory>()">
+                                                <option selected="selected" disabled value="">--Select--</option>
+                                            </select>
                                             <!-- Text Boxes for Story -->
                                             <input type="text" asp-for="Title" class="form-control mb-2" placeholder="News Title">
                                             <textarea asp-for="Description" class="form-control" placeholder="Enter your news story" rows="10" cols="100"></textarea>
@@ -164,7 +168,7 @@
                                     <!-- Card with Image, Title, and Description -->
                                     <div class="card mb-6 body">
                                         <div class="card-body mb-4">
-                                            <img id="output" src="~/assets/img/ImagePlaceholder.png" class="form-control" />
+                                            <img id="output" src="~/Docs/@Model.PostPicture" class="form-control" />
                                         </div>
                                     </div>
                                 </div>

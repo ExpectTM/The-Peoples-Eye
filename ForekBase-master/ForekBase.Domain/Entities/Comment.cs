@@ -5,6 +5,7 @@
 // Purpose:         Defines the comment class.
 
 #region Using Directives
+using ForekBase.Domain.Entities.Common;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -20,7 +21,7 @@ namespace ForekBase.Domain.Entities
     /// <summary>
     /// Represents a user comment on a news article.
     /// </summary>
-    public class Comment
+    public class Comment : BaseEntityModel
     {
         /// <summary>
         /// Gets or sets the unique identifier for the comment.
@@ -79,7 +80,7 @@ namespace ForekBase.Domain.Entities
         /// <value>
         /// The news article identifier.
         /// </value>
-        public Guid NewsArticleId { get; set; }
+        public Guid PostId { get; set; }
 
         /// <summary>
         /// Gets or sets the news article associated with the comment.
@@ -87,6 +88,6 @@ namespace ForekBase.Domain.Entities
         /// <value>
         /// The associated news article.
         /// </value>
-        public NewsArticle NewsArticle { get; set; }
+        public Post? Post { get; set; }
     }
 }
