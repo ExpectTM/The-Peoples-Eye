@@ -1,7 +1,7 @@
 ﻿
 <link rel="stylesheet" href="style.css">
 
-<body onload="enableEditMode();">
+<div class="bodyContainer" onload="enableEditMode();">
     <div>
         <button type="button" class="raise" onclick="toggleDarkLight()"><i class="fas fa-adjust"></i></button>
         <button type="button" class="raise" title="Negrito" onclick="execCmd('bold');"><i class="fas fa-bold"></i></button>
@@ -60,6 +60,6 @@
     </div>
     <textarea asp-for"Description" name="richTextField" rows="20" cols="90"></textarea>
 
-</body>
+</div>
 <script src="https://kit.fontawesome.com/ae3393d1fa.js" crossorigin="anonymous"></script>
 <script src="~/utility/assets/js/RichText/Index.js"></script>

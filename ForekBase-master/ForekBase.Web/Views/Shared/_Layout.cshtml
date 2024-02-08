@@ -32,7 +32,7 @@
                         <div class="header_top_left">
                             <ul class="top_nav">
                                 <li><a href="@Url.Action("Index", "Home")">Home</a></li>
-                                <li><a href="#">About</a></li>
+                                @* <li><a href="#">About</a></li> *@
                                 <li><a href="@Url.Action("ContactUs", "Home")">Contact</a></li>
                                 <li><a href="@Url.Action("Admin", "Admin")">Admin</a></li>
                             </ul>
@@ -70,8 +70,7 @@
                         <li><a href="#">Investigations</a></li>
                         <li><a href="#">Environment</a></li>
                         <li><a href="#">Climate Change</a></li>
-                        <!-- <li><a href="pages/contact.html">Contact Us</a></li>
-                        <li><a href="pages/404.html">404 Page</a></li> -->
+                        <li><a href="@Url.Action("ContactUs", "Home")">Contact</a></li>
                     </ul>
                 </div>
             </nav>
@@ -89,9 +88,9 @@
                         <div class="footer_widget wow fadeInDown">
                             <h2>Tag</h2>
                             <ul class="tag_nav">
-                                <li><a href="#">Games</a></li>
+                                <li><a href="#">Politics</a></li>
                                 <li><a href="#">Sports</a></li>
-                                <li><a href="#">Fashion</a></li>
+                                <li><a href="#">Technology</a></li>
                                 <li><a href="#">Business</a></li>
                             </ul>
                         </div>
@@ -99,7 +98,7 @@
                     <div class="col-lg-4 col-md-4 col-sm-4">
                         <div class="footer_widget wow fadeInRightBig">
                             <h2>Contact</h2>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                            <p></p>
                             <address>
                                 Nelspruit, Mbombela
                             </address>
@@ -109,7 +108,7 @@
             </div>
            
             <div class="footer_bottom">
-                <p class="copyright">Copyright &copy; 2024 <a href="index.html">The People's Eye</a></p>
+                <p class="copyright">Copyright &copy; 2024 <a href="@Url.Action("Index", "Home")">The People's Eye</a></p>
                 <a href="https://forekict.com/" class="developer">Developed by Forek ICT Services</a>
             </div>
         </footer>

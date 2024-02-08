@@ -29,21 +29,28 @@
                     <a href="#">The people's eye</a>
                 </div>
                 <ul class="sidebar-nav">
-                    <li class="sidebar-header">
-                        Admin Menu
-                    </li>
+
                     <li class="sidebar-item">
                         <a href="#" class="sidebar-link">
                             <i class="fa-solid fa-list pe-2"></i>
                             Dashboard
                         </a>
                     </li>
+
                     <li class="sidebar-item">
-                        <a href="#" class="sidebar-link">
-                            <i class="fas fa-newspaper pe-2"></i>
+                        <a href="#" class="sidebar-link collapsed" data-bs-target="#multi" data-bs-toggle="collapse"
+                           aria-expanded="false">
+                            <i class="fa-solid fa-book"></i>
                             Post
                         </a>
+                        <ul id="multi" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                            <li class="sidebar-item">
+                                <a href="@Url.Action("OnGetAllPosts", "Post")" class="sidebar-link">All Posts</a>
+                                <a href="@Url.Action("OnCreatePost", "Post")" class="sidebar-link">Create New Post</a>
+                            </li>
+                        </ul>
                     </li>
+
                     <li class="sidebar-item">
                         <a href="#" class="sidebar-link collapsed" data-bs-target="#pages" data-bs-toggle="collapse"
                            aria-expanded="false">
@@ -151,12 +158,14 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <h5 class="card-title">Category</h5>
-                                            <select asp-for="Category" class="form-control Type" required asp-items="Html.GetEnumSelectList<eCategory>()">
-                                                <option selected="selected" disabled value="">--Select--</option>
-                                            </select>
+                                            <input asp-for="Category" readonly class="form-control mb-2" placeholder="News Title">
                                             <!-- Text Boxes for Story -->
-                                            <input type="text" asp-for="Title" class="form-control mb-2" placeholder="News Title">
-                                            <textarea asp-for="Description" class="form-control" placeholder="Enter your news story" rows="10" cols="100"></textarea>
+                                            <h5 class="card-title">Title</h5>
+                                            <input type="text" asp-for="Title" readonly class="form-control mb-2" placeholder="News Title">
+                                            <h5 class="card-title">Article</h5>
+                                            @Html.Raw(Model.Description)
+                                            
+
                                         </div>
                                     </div>
                                 </div>
@@ -166,7 +175,7 @@
                                     <!-- Card with Image, Title, and Description -->
                                     <div class="card mb-6 body">
                                         <div class="card-body mb-4">
-                                            <img id="output" src="~/Docs/@Model.PostPicture" class="form-control" />
+                                            <img id="output" src="~/Docs/@Model.FirstFile" class="form-control" />
                                         </div>
                                     </div>
                                 </div>

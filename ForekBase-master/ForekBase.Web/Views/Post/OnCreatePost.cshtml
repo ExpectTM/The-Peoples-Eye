@@ -1,7 +1,6 @@
 ﻿@model ForekBase.Web.ViewModels.PostVM
 @using ForekBase.Domain.Entities.Enums
 
-
 @{
     Layout = null;
 }
@@ -14,11 +13,36 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css">
     <script src="https://kit.fontawesome.com/ae360af17e.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="~/utility/assets/css/post/StylePost.css" />
     <link rel="stylesheet" href="~/utility/assets/css/RichText/Style.css" />
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
+
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
+
+    @* <script src="~/utility/assets/tinymce/js/tinymce/tinymce.min.js" referrerpolicy="origin"></script> *@
     
+    @* <script src="https://cdn.tiny.cloud/1/cqjmaf90tbpe67jvb5m5pnc6qndbmyq6ozddc2ydwwsck4s2/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+
+    <script>
+        tinymce.init({
+            selector: '#Description',
+            plugins: 'ai tinycomments mentions anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed permanentpen footnotes advtemplate advtable advcode editimage tableofcontents mergetags powerpaste tinymcespellchecker autocorrect a11ychecker typography inlinecss',
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | align lineheight | tinycomments | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+            tinycomments_mode: 'embedded',
+            tinycomments_author: 'Author name',
+            mergetags_list: [
+                { value: 'First.Name', title: 'First Name' },
+                { value: 'Email', title: 'Email' },
+            ],
+            ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
+        });
+    </script> *@
+
+
 </head>
 
 <body>
@@ -31,15 +55,14 @@
                     <a href="#">The people's eye</a>
                 </div>
                 <ul class="sidebar-nav">
-                    <li class="sidebar-header">
-                        Admin Menu
-                    </li>
+
                     <li class="sidebar-item">
                         <a href="#" class="sidebar-link">
                             <i class="fa-solid fa-list pe-2"></i>
                             Dashboard
                         </a>
                     </li>
+
                     <li class="sidebar-item">
                         <a href="#" class="sidebar-link collapsed" data-bs-target="#multi" data-bs-toggle="collapse"
                            aria-expanded="false">
@@ -53,6 +76,7 @@
                             </li>
                         </ul>
                     </li>
+
                     <li class="sidebar-item">
                         <a href="#" class="sidebar-link collapsed" data-bs-target="#pages" data-bs-toggle="collapse"
                            aria-expanded="false">
@@ -147,118 +171,129 @@
                     <div class="mb-3">
                         <h4>Create a new post</h4>
                     </div>
-                    
+
                     <!-- Table Element -->
 
-                    <form asp-action="OnCreatePost" enctype="multipart/form-data">
 
-                    <div class="container mt-5">
-                        <div class="row">
-                            <!-- Left Column -->
-                            <div class="col-md-9">
-                                <!-- Image Upload Box -->
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Upload Image</h5>
-                                        <!-- Your image upload form or input can go here -->
-                                        <input asp-for="LogoDoc" accept="image/*,.pdf" type="file" class="form-control mb-2" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])" class="form-control" />
+                    <form asp-action="OnCreatePost" enctype="multipart/form-data">
+                        
+                        <div class="container mt-5">
+                            <div class="row">
+                                <!-- Left Column -->
+                                <div class="col-md-9">
+                                    <!-- Image Upload Box -->
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Upload Image</h5>
+                                            <!-- Your image upload form or input can go here -->
+
+                                            <input type="file" asp-for="FirstDoc"  accept="image/*,.pdf" class="form-control border-0 shadow mb-2" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])" />
+                                           
+                                            <br />
+
+                                            <h6 class="card-title">Do you want to add more file(s)?</h6>
+
+                                            <div class="row mt-4">
+
+                                                <div class="input-group mb-3 input1">
+                                                    <div class="form-check">
+                                                        <label class="form-check-label" for="isFileYes">Yes</label>
+
+                                                        <input type="radio" asp-for="IsAddFile" class="form-check-input m-1" value="true" id="isFileYes" required />
+
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <label class="form-check-label" for="isFileNo">No</label>
+                                                        <input type="radio" asp-for="IsAddFile" class="form-check-input m-1" value="false" id="isFileNo" required />
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div id="newFile">
+                                                <input type="file" asp-for="SecondDoc" accept="image/*,.pdf" class="form-control border-0 shadow mb-2" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])" />
+                                                <input type="file" asp-for="ThirdDoc"  accept="image/*,.pdf" class="form-control border-0 shadow mb-2" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])" />
+
+                                            </div>
+                                            <br />
                                             <h5 class="card-title">Category</h5>
                                             <select asp-for="Category" class="form-control Type" required asp-items="Html.GetEnumSelectList<eCategory>()">
                                                 <option selected="selected" disabled value="">--Select--</option>
                                             </select>
                                             <br />
-                                        <!-- Text Boxes for Story -->
+                                            <!-- Text Boxes for Story -->
                                             <h5 class="card-title">Title</h5>
-                                        <input type="text" asp-for="Title" class="form-control mb-2" placeholder="News Title">
+                                            <input type="text" asp-for="Title" class="form-control mb-2" placeholder="News Title">
                                             <h5 class="card-title">Article</h5>
 
                                             <!-- Text Editor -->
-                                            <div class="bodySection" onload="enableEditMode();">
-                                                <div>
-                                                    <button type="button" class="raise" onclick="toggleDarkLight()"><i class="fas fa-adjust"></i></button>
-                                                    <button type="button" class="raise" title="Negrito" onclick="execCmd('bold');"><i class="fas fa-bold"></i></button>
-                                                    <button type="button" class="raise" onclick="execCmd('italic');"><i class="fas fa-italic"></i></button>
-                                                    <button type="button" class="raise" onclick="execCmd('underline');"><i class="fas fa-underline"></i></button>
-                                                    <button type="button" class="raise" onclick="execCmd('removeFormat');"><i class="fas fa-remove-format"></i></button>
-                                                    <button type="button" class="raise" onclick="execCmd('strikeThrough');"><i class="fas fa-strikethrough"></i></button>
-                                                    <button type="button" class="raise" onclick="execCmd('justifyLeft');"><i class="fas fa-align-left"></i></button>
-                                                    <button type="button" class="raise" onclick="execCmd('justifyCenter');"><i class="fas fa-align-center"></i></button>
-                                                    <button type="button" class="raise" onclick="execCmd('justifyRight');"><i class="fas fa-align-right"></i></button>
-                                                    <button type="button" class="raise" onclick="execCmd('justifyFull');"><i class="fas fa-align-justify"></i></button>
-                                                    <button type="button" class="raise" onclick="execCmd('cut');"><i class="fas fa-cut"></i></button>
-                                                    <button type="button" class="raise" onclick="execCmd('copy');"><i class="fas fa-copy"></i></button>
-                                                    <button type="button" class="raise" onclick="execCmd('indent');"><i class="fas fa-indent"></i></button>
-                                                    <button type="button" class="raise" onclick="execCmd('outdent');"><i class="fas fa-outdent"></i></button>
-                                                    <button type="button" class="raise" onclick="execCmd('subscript');"><i class="fas fa-subscript"></i></button>
-                                                    <button type="button" class="raise" onclick="execCmd('superscript');"><i class="fas fa-superscript"></i></button>
-                                                    <button type="button" class="raise" onclick="execCmd('undo');"><i class="fas fa-undo"></i></button>
-                                                    <button type="button" class="raise" onclick="execCmd('redo');"><i class="fas fa-redo"></i></button>
-                                                    <button type="button" class="raise" onclick="execCmd('insertUnorderedList');"><i class="fas fa-list-ul"></i></button>
-                                                    <button type="button" class="raise" onclick="execCmd('insertOrderedList');"><i class="fas fa-list-ol"></i></button>
-                                                    <button type="button" class="raise" onclick="execCmd('insertParagraph');"><i class="fas fa-paragraph"></i></button>
-                                                    <select class="raise" onchange="execCommandWithArg('formatBlock', this.value);">
-                                                        <option value="H1">H1</option>
-                                                        <option value="H2">H2</option>
-                                                        <option value="H3">H3</option>
-                                                        <option value="H4">H4</option>
-                                                        <option value="H5">H5</option>
-                                                        <option value="H6">H6</option>
-                                                    </select>
-                                                    <button type="button" class="raise" onclick="execCmd('insertHorizontalRule');">HR</button>
-                                                    <button type="button" class="raise" onclick="execCmd('createLink', prompt('Enter a URL', 'http://'));"><i class="fas fa-link"></i></button>
-                                                    <button type="button" class="raise" onclick="execCmd('unlink');"><i class="fas fa-unlink"></i></button>
-                                                    <button type="button" class="raise" onclick="toggleSource();"><i class="fas fa-code"></i></button>
-                                                    <br>
-                                                    @* <button class="raise" onclick="toggleEdit();">Toggle Edit</button> *@
-                                                    <select  class="raise" onchange="execCommandWithArg('fontName', this.value);">
-                                                        <option value="Arial">Arial</option>
-                                                        <option value="Comic Sans MS">Comic Sans MS</option>
-                                                        <option value="Courier">Courier</option>
-                                                        <option value="Georgia">Georgia</option>
-                                                        <option value="Tahoma">Tahoma</option>
-                                                        <option value="Times New Roman">Times New Roman</option>
-                                                        <option value="Verdana">Verdana</option>
-                                                    </select>
-                                                    <select  class="raise" onchange="execCommandWithArg('fontSize', this.value);">
-                                                        <option value="1">1</option>
-                                                        <option value="2">2</option>
-                                                        <option value="3">3</option>
-                                                        <option value="4">4</option>
-                                                        <option value="5">5</option>
-                                                        <option value="6">6</option>
-                                                        <option value="7">7</option>
-                                                    </select>
-                                                    <button type="button" class="raise" onclick="execCommandWithArg('insertImage', prompt('Enter the image URL', ''));"><i class="fas fa-file-image"></i></button>
+
+                                            <div class="cont">
+                                                <div id="editor" contenteditable="false">
+                                                    <section id="toolbar">
+
+                                                        <div id="bold" class="icon fa fa-bold"></div>
+                                                        <div id="italic" class="icon fa fa-italic"></div>
+                                                        
+                                                        <div id="createLink" class="icon fa fa-link"></div>
+                                                        <div id="insertUnorderedList" class="icon fa fa-list"></div>
+                                                        <div id="insertOrderedList" class="icon fa fa-list-ol"></div>
+                                                        <div id="justifyLeft" class="icon fa fa-align-left"></div>
+                                                        <div id="justifyRight" class="icon fa fa-align-right"></div>
+                                                        <div id="justifyCenter" class="icon fa fa-align-center"></div>
+                                                        <div id="justifyFull" class="icon fa fa-align-justify"></div>
+
+                                                    </section>
+
+                                                    <div id="page" contenteditable="true"></div>
                                                 </div>
-                                                @* <iframe asp-for"Description"  name="richTextField" rows="20" cols="90"></iframe> *@
-                                                <textarea asp-for"Description" name="richTextField" ></textarea>
+
                                             </div>
 
+                                            <textarea asp-for="Description" hidden id="Description" name="Description" class="form-control mb-2" placeholder="News Title"></textarea>
+                                        </div>
+                                    </div>
 
+                                </div>
+                                <!-- Right Column -->
+                                @* <div class="col-md-3">
+                                <!-- Card with Image, Title, and Description -->
+                                <div class="card mb-9 body">
+                                <div class="card-body mb-6">
+                                <img id="output" src="~/assets/img/ImagePlaceholder.png" class="form-control" />
+                                </div>
+                                </div>
+                                </div> *@
 
-
+                                <div class="col-md-3">
+                                    <div class="slider">
+                                        <div class="card mb-6 body">
+                                            <div class="card-body mb-4">
+                                                <img src="~/assets/img/ImagePlaceholder.png" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="card mb-6 body">
+                                            <div class="card-body mb-4">
+                                                <img src="~/assets/img/ImagePlaceholder.png" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="card mb-6 body">
+                                            <div class="card-body mb-4">
+                                                <img src="~/assets/img/ImagePlaceholder.png" class="form-control" />
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
+                                
+
                             </div>
 
-                            <!-- Right Column -->
-                            <div class="col-md-3">
-                                <!-- Card with Image, Title, and Description -->
-                                <div class="card mb-6 body">
-                                    <div class="card-body mb-4">
-                                        <img id="output" src="~/assets/img/ImagePlaceholder.png" class="form-control" />
-                                    </div>
-                                </div>
+                            <div class="form-group col-md-12 mt-1">
+                                <button type="submit" onclick="getContent();" class="btn btn-success save"><i class="fa fa-save"></i> Save</button>
+                                <a class="btn btn-outline-danger float-end" asp-action="Index" asp-controller="Home"><i class="fa fa-window-close"></i> Exit</a>
                             </div>
 
                         </div>
-
-                            <div class="form-group col-md-12 mt-1">
-                                <button type="submit" class="btn btn-success save"><i class="fa fa-save"></i> Save</button>
-                                <a class="btn btn-outline-danger" asp-action="Index" asp-controller="Home"><i class="fa fa-window-close"></i> Exit</a>
-                            </div>
-                    </div>
-                        
                     </form>
                 </div>
             </main>
@@ -287,7 +322,7 @@
                                 <li class="list-inline-item">
                                     <a href="#" class="text-muted">Terms</a>
                                 </li>
-                                
+
                             </ul>
                         </div>
                     </div>
@@ -295,15 +330,42 @@
             </footer>
         </div>
     </div>
-   
-    
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/utility/assets/js/post/post.js"></script>
+    <script src="https://kit.fontawesome.com/ae3393d1fa.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <script src="~/utility/assets/js/RichText/Index.js"></script>
+
+    <script type="text/javascript">
+
+        const isFileNo = document.getElementById('isFileNo');
+        const isFileYes = document.getElementById('isFileYes');
+        const newFile = document.getElementById('newFile');
+
+        isFileNo.addEventListener('change', function () {
+            newFile.style.display = this.checked ? 'none' : 'block';
+        });
+
+        isFileYes.addEventListener('change', function () {
+            newFile.style.display = this.checked ? 'block' : 'none';
+        });
+
+
+        $(document).ready(function () {
+            $('.slider').slick({
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                autoplay: true,
+                autoplaySpeed: 5000,
+            });
+        });
+    </script>
 </body>
 
 </html>
 
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/utility/assets/js/post/post.js"></script>
-    <script src="https://kit.fontawesome.com/ae3393d1fa.js" crossorigin="anonymous"></script>
-    <script src="~/utility/assets/js/RichText/Index.js"></script>
+
 

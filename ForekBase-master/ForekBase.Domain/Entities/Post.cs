@@ -16,11 +16,19 @@ namespace ForekBase.Domain.Entities
         public Guid PostId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        #nullable enable
-        public string? PostPicture { get; set; }
+        public eCategory Category { get; set; }
+
+        
+        public string? FirstFile { get; set; }
         [NotMapped]
-        public IFormFile? LogoDoc { get; set; }
-        #nullable disable
-        public eCategory Category { get; set; } 
+        public IFormFile? FirstDoc { get; set; }
+        public string? SecondFile { get; set; }
+        [NotMapped]
+        public IFormFile? SecondDoc { get; set; }
+        public string? ThirdFile { get; set; }
+        [NotMapped]
+        public IFormFile? ThirdDoc { get; set; }
+        
+
     }
 }

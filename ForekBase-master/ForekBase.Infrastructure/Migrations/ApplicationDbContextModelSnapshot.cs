@@ -189,6 +189,9 @@ namespace ForekBase.Infrastructure.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("FirstFile")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -198,7 +201,10 @@ namespace ForekBase.Infrastructure.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("PostPicture")
+                    b.Property<string>("SecondFile")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ThirdFile")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")

@@ -1,20 +1,17 @@
-﻿
+﻿@model ForekBase.Web.ViewModels.PostVM
+@using ForekBase.Domain.Entities.Enums
+
         <section id="newsSection">
             <div class="row">
                 <div class="col-lg-12 col-md-12">
                     <div class="latest_newsarea">
                         <span>Latest News</span>
-                        <ul id="ticker01" class="news_sticker">
-                            <li><a href="#"><img src="../images/news_thumbnail3.jpg" alt="">My First News Item</a></li>
-                            <li><a href="#"><img src="../images/news_thumbnail3.jpg" alt="">My Second News Item</a></li>
-                            <li><a href="#"><img src="../images/news_thumbnail3.jpg" alt="">My Third News Item</a></li>
-                            <li><a href="#"><img src="../images/news_thumbnail3.jpg" alt="">My Four News Item</a></li>
-                            <li><a href="#"><img src="../images/news_thumbnail3.jpg" alt="">My Five News Item</a></li>
-                            <li><a href="#"><img src="../images/news_thumbnail3.jpg" alt="">My Six News Item</a></li>
-                            <li><a href="#"><img src="../images/news_thumbnail3.jpg" alt="">My Seven News Item</a></li>
-                            <li><a href="#"><img src="../images/news_thumbnail3.jpg" alt="">My Eight News Item</a></li>
-                            <li><a href="#"><img src="../images/news_thumbnail2.jpg" alt="">My Nine News Item</a></li>
-                        </ul>
+                <ul id="ticker01" class="news_sticker">
+                    @foreach (var post in Model.AllPosts)
+                    {
+                        <li><a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = post.PostId})"><img src="~/Docs/@post.FirstFile" alt="">@post.Title</a></li>
+                    }
+                </ul>
                         <div class="social_area">
                             <ul class="social_nav">
                                 <li class="facebook"><a href="#"></a></li>
@@ -31,7 +28,7 @@
                     <div class="left_content">
                         <div class="contact_area">
                             <h2>Contact Us</h2>
-                            <!-- <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labolore magna aliqua. Ut enim ad minim veniam. Lorem ipsum dosectetur adipisicing elit, sed do.Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p> -->
+                            <!-- <p> </p> -->
                             <form action="#" class="contact_form">
                                 <input class="form-control" type="text" placeholder="Name*">
                                 <input class="form-control" type="email" placeholder="Email*">
@@ -46,30 +43,31 @@
                         <div class="single_sidebar">
                             <h2><span>Popular Post</span></h2>
                             <ul class="spost_nav">
-                                <li>
-                                    <div class="media wow fadeInDown">
-                                        <a href="single_page.html" class="media-left"> <img alt="" src="../images/post_img1.jpg"> </a>
-                                        <div class="media-body"> <a href="single_page.html" class="catg_title"> Aliquam malesuada diam eget turpis varius 1</a> </div>
+
+                        <li>
+                            @if (Model.AllPosts.Any())
+                            {
+                                var latestPosts = Model.AllPosts.Take(5);
+
+                                foreach (var latestpost in latestPosts)
+                                {
+                                    <div class="media">
+                                        <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = latestpost.PostId })" class="media-left">
+                                            <img alt="" src="~/Docs/@latestpost.FirstFile">
+                                        </a>
+
+                                        <div class="media-body">
+                                            <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = latestpost.PostId })">@latestpost.Title</a>
+                                        </div>
                                     </div>
-                                </li>
-                                <li>
-                                    <div class="media wow fadeInDown">
-                                        <a href="single_page.html" class="media-left"> <img alt="" src="../images/post_img2.jpg"> </a>
-                                        <div class="media-body"> <a href="single_page.html" class="catg_title"> Aliquam malesuada diam eget turpis varius 2</a> </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="media wow fadeInDown">
-                                        <a href="single_page.html" class="media-left"> <img alt="" src="../images/post_img1.jpg"> </a>
-                                        <div class="media-body"> <a href="single_page.html" class="catg_title"> Aliquam malesuada diam eget turpis varius 3</a> </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="media wow fadeInDown">
-                                        <a href="single_page.html" class="media-left"> <img alt="" src="../images/post_img2.jpg"> </a>
-                                        <div class="media-body"> <a href="single_page.html" class="catg_title"> Aliquam malesuada diam eget turpis varius 4</a> </div>
-                                    </div>
-                                </li>
+
+                                }
+                            }
+                            else
+                            {
+                                <p>No posts available.</p>
+                            }
+                        </li>
                             </ul>
                         </div>
                     </aside>

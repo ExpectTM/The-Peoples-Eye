@@ -10,16 +10,16 @@
             <div class="latest_newsarea">
                 <span>Latest News</span>
                 <ul id="ticker01" class="news_sticker">
-                @foreach(var post in Model.AllPosts)
-                {
-                  <li><a href="#"><img src="~/Docs/@post.PostPicture" alt="">@post.Title</a></li>   
-                }
+                    @foreach (var post in Model.AllPosts)
+                    {
+                        <li><a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = post.PostId })"><img src="~/Docs/@post.FirstFile" alt="">@post.Title</a></li>
+                    }
                 </ul>
                 <div class="social_area">
                     <ul class="social_nav">
                         <li class="facebook"><a href="#"></a></li>
                         <li class="twitter"><a href="#"></a></li>
-                       
+
                     </ul>
                 </div>
             </div>
@@ -36,44 +36,99 @@
                         <li><a href="#">@Model.Category</a></li>
                         <li class="active"></li>
                     </ol>
-                    <h1 >@Model.Title</h1>
-                    <div class="post_commentbox"> <a href="#"><i class="fa fa-user"></i>@Model.CreatedBy</a> <span><i class="fa fa-calendar"></i>@Model.CreatedOn</span> <a href="#"><i class="fa fa-tags"></i>@Model.Category</a> </div>
-                    <div class="single_page_content">
-                        <img class="slider_tittle" id="output" src="~/Docs/@Model.PostPicture" />
-                        <br />
-                        @Model.Description
+                    <h1>@Model.Title</h1>
+                    @{
+                        DateTime createdOn = Model.CreatedOn;
+
+                        TimeSpan timeDifference = DateTime.Now - createdOn;
+
+                        string dateTime = "";
+
+                        if (timeDifference.TotalMinutes < 60)
+                        {
+                            dateTime = $"{(int)timeDifference.TotalMinutes} minutes ago";
+                        }
+
+                        else if (timeDifference.TotalHours < 24)
+                        {
+                            dateTime = $"{(int)timeDifference.TotalHours} hours ago";
+                        }
+                        else if (timeDifference.TotalDays < 20)
+                        {
+                            dateTime = $"{(int)timeDifference.TotalDays} days ago";
+                        }
+                        else
+                        {
+                            dateTime = createdOn.ToString("MM/dd/yyyy hh:mm:ss tt");
+                        }
+                    }
+
+                    <div class="post_commentbox">
+                        <a href="#"><i class="fa fa-user"></i>@Model.CreatedBy</a>
+                        <span><i class="fa fa-calendar"></i>@dateTime</span>
+                        <a href="#"><i class="fa fa-tags"></i>@Model.Category</a>
                     </div>
-                    
+                    <div class="single_page_content">
+
+                        <div class="slick_slider">
+                            @if (Model.FirstFile !=  null )
+                            {
+                                <div class="single_iteam">
+                                    <img src="~/Docs/@Model.FirstFile" alt="" />
+                                </div>
+                            }
+                            
+                            @if(Model.SecondFile != null)
+                            {
+                                <div class="single_iteam">
+                                    <img src="~/Docs/@Model.SecondFile" alt="" />
+                                </div>
+                            }
+
+                            @if (Model.ThirdFile != null)
+                            {
+                                <div class="single_iteam">
+                                    <img src="~/Docs/@Model.ThirdFile" alt="" />
+                                </div>
+                            }
+
+                            <br />
+                            
+                        </div>
+                        @Html.Raw(@Model.Description)
+                    </div>
+
                     <div class="social_link">
                         <ul class="sociallink_nav">
                             <li><a href="#"><i class="fa fa-facebook"></i></a></li>
                             <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                            <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                            <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                            <li><a href="#"><i class="fa fa-pinterest"></i></a></li>
                         </ul>
                     </div>
                     <div class="related_post">
                         <h2>Related Post <i class="fa fa-thumbs-o-up"></i></h2>
                         <ul class="spost_nav wow fadeInDown animated">
-                            <li>
-                                <div class="media">
-                                    <a class="media-left" href="single_page.html"> <img src="~/utility/images/single_post_img.jpg" alt=""> </a>
-                                    <div class="media-body"> <a class="catg_title" href="single_page.html"> Aliquam malesuada diam eget turpis varius</a> </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="media">
-                                    <a class="media-left" href="single_page.html"> <img src="~/utility/images/slider_img2.jpg" alt=""> </a>
-                                    <div class="media-body"> <a class="catg_title" href="single_page.html"> Aliquam malesuada diam eget turpis varius</a> </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="media">
-                                    <a class="media-left" href="single_page.html"> <img src="~/utility/images/slider_img3.jpg" alt=""> </a>
-                                    <div class="media-body"> <a class="catg_title" href="single_page.html"> Aliquam malesuada diam eget turpis varius</a> </div>
-                                </div>
-                            </li>
+
+                            @foreach (var item in Model.AllPosts.Take(3))
+                            {
+
+                                if (item.Category == eCategory.News)
+                                {
+                                    <li>
+                                        <div class="media">
+                                            <a class="media-left" href="@Url.Action("OnGetPostPublic", "Post", new { PostId = item.PostId })">
+                                                <img alt="" src="~/Docs/@item.FirstFile">
+                                            </a>
+
+                                            <div class="media-body"> <a class="catg_title" href="@Url.Action("OnGetPostPublic", "Post", new { PostId = item.PostId })">@item.Title</a></div>
+
+                                        </div>
+                                    </li>
+                                }
+
+                            }
+
+
+
                         </ul>
                     </div>
                 </div>
@@ -96,33 +151,37 @@
         </nav>
         <div class="col-lg-4 col-md-4 col-sm-4">
             <aside class="right_content">
-                <div class="single_sidebar">
+                <div class="latest_post">
                     <h2><span>Popular Post</span></h2>
                     <ul class="spost_nav">
+
                         <li>
-                            <div class="media wow fadeInDown">
-                                <a href="single_page.html" class="media-left"> <img alt="" src="~/utility/images/post_img1.jpg"> </a>
-                                <div class="media-body"> <a href="single_page.html" class="catg_title"> Aliquam malesuada diam eget turpis varius 1</a> </div>
-                            </div>
+
+                            @if (Model.AllPosts.Any())
+                            {
+                                var latestPosts = Model.AllPosts.Take(5);
+
+                                foreach (var latestpost in latestPosts)
+                                {
+                                    <div class="media wow fadeInDown">
+                                        <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = latestpost.PostId })" class="media-left">
+                                            <img alt="" src="~/Docs/@latestpost.FirstFile">
+                                        </a>
+
+                                        <div class="media-body">
+                                            <a class="catg_title" href="@Url.Action("OnGetPostPublic", "Post", new { PostId = latestpost.PostId })">@latestpost.Title</a>
+                                        </div>
+                                    </div>
+
+                                }
+                            }
+                            else
+                            {
+                                <p>No posts available.</p>
+                            }
+
                         </li>
-                        <li>
-                            <div class="media wow fadeInDown">
-                                <a href="single_page.html" class="media-left"> <img alt="" src="~/utility/images/post_img2.jpg"> </a>
-                                <div class="media-body"> <a href="single_page.html" class="catg_title"> Aliquam malesuada diam eget turpis varius 2</a> </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="media wow fadeInDown">
-                                <a href="single_page.html" class="media-left"> <img alt="" src="~/utility/images/post_img1.jpg"> </a>
-                                <div class="media-body"> <a href="single_page.html" class="catg_title"> Aliquam malesuada diam eget turpis varius 3</a> </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="media wow fadeInDown">
-                                <a href="single_page.html" class="media-left"> <img alt="" src="~/utility/images/post_img2.jpg"> </a>
-                                <div class="media-body"> <a href="single_page.html" class="catg_title"> Aliquam malesuada diam eget turpis varius 4</a> </div>
-                            </div>
-                        </li>
+
                     </ul>
                 </div>
                 <div class="single_sidebar">
@@ -135,13 +194,10 @@
                         <div role="tabpanel" class="tab-pane active" id="category">
                             <ul>
                                 <li class="cat-item"><a href="#">Sports</a></li>
-                                <li class="cat-item"><a href="#">Fashion</a></li>
+                                <li class="cat-item"><a href="#">Politics</a></li>
                                 <li class="cat-item"><a href="#">Business</a></li>
                                 <li class="cat-item"><a href="#">Technology</a></li>
-                                <li class="cat-item"><a href="#">Games</a></li>
-                                <li class="cat-item"><a href="#">Life &amp; Style</a></li>
-                                <li class="cat-item"><a href="#">Photography</a></li>
-                            </ul>
+
                         </div>
                         <div role="tabpanel" class="tab-pane" id="video">
                             <div class="vide_area">
@@ -150,46 +206,25 @@
                         </div>
                         <div role="tabpanel" class="tab-pane" id="comments">
                             <ul class="spost_nav">
-                                <li>
-                                    <div class="media wow fadeInDown">
-                                        <a href="single_page.html" class="media-left"> <img alt="" src="../images/post_img1.jpg"> </a>
-                                        <div class="media-body"> <a href="single_page.html" class="catg_title"> Aliquam malesuada diam eget turpis varius 1</a> </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="media wow fadeInDown">
-                                        <a href="single_page.html" class="media-left"> <img alt="" src="../images/post_img2.jpg"> </a>
-                                        <div class="media-body"> <a href="single_page.html" class="catg_title"> Aliquam malesuada diam eget turpis varius 2</a> </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="media wow fadeInDown">
-                                        <a href="single_page.html" class="media-left"> <img alt="" src="../images/post_img1.jpg"> </a>
-                                        <div class="media-body"> <a href="single_page.html" class="catg_title"> Aliquam malesuada diam eget turpis varius 3</a> </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="media wow fadeInDown">
-                                        <a href="single_page.html" class="media-left"> <img alt="" src="../images/post_img2.jpg"> </a>
-                                        <div class="media-body"> <a href="single_page.html" class="catg_title"> Aliquam malesuada diam eget turpis varius 4</a> </div>
-                                    </div>
-                                </li>
+                                @* <li>
+                                <div class="media wow fadeInDown">
+                                <a href="single_page.html" class="media-left"> <img alt="" src="../images/post_img1.jpg"> </a>
+                                <div class="media-body"> <a href="single_page.html" class="catg_title"> Aliquam malesuada diam eget turpis varius 1</a> </div>
+                                </div>
+                                </li> *@
+
                             </ul>
                         </div>
                     </div>
                 </div>
                 <div class="single_sidebar wow fadeInDown">
-                    <h2><span>Sponsor</span></h2>
-                    <a class="sideAdd" href="#"><img src="../images/add_img.jpg" alt=""></a>
+                    <h2><span>ADS</span></h2>
+
                 </div>
                 <div class="single_sidebar wow fadeInDown">
                     <h2><span>Category Archive</span></h2>
-                    <select class="catgArchive">
-                        <option>Select Category</option>
-                        <option>Life styles</option>
-                        <option>Sports</option>
-                        <option>Technology</option>
-                        <option>Treads</option>
+                    <select asp-for="Category" class="catgArchive" asp-items="Html.GetEnumSelectList<eCategory>()">
+                        <option selected="selected" disabled value="">Select Category</option>
                     </select>
                 </div>
                 <div class="single_sidebar wow fadeInDown">
@@ -206,5 +241,17 @@
     </div>
 </section>
 
+<script src="https://cdn.jsdelivr.net/npm/popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz4fnFO9gybB5IXNxFwWQfE7u8Lj+XJHAxKlXiG/8rsrtpb6PEdzD828Ii" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/" crossorigin="anonymous"></script>
 
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+        var myCarousel = document.querySelector('#carouselExample')
+        var carousel = new bootstrap.Carousel(myCarousel, {
+            interval: 2000
+        })
+    });
+
+</script>
 

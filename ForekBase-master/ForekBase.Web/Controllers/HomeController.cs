@@ -11,11 +11,13 @@ namespace ForekBase.Web.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+
         private readonly IUnitOfWork _unitOfWork;
 
         public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork)
         {
             _logger = logger;
+
             _unitOfWork = unitOfWork;
         }
 
@@ -29,7 +31,9 @@ namespace ForekBase.Web.Controllers
                 CreatedOn = post.CreatedOn,
                 Description = post.Description,
                 Title = post.Title,
-                PostPicture = post.PostPicture,
+                FirstFile = post.FirstFile,
+                SecondFile = post.SecondFile,
+                ThirdFile = post.ThirdFile,
                 ModifiedOn = post.ModifiedOn,
                 CreatedBy = post.CreatedBy,
                 ModifiedBy = post.ModifiedBy,
@@ -53,6 +57,34 @@ namespace ForekBase.Web.Controllers
 
         public IActionResult ContactUs()
         {
+            var posts = _unitOfWork.Post.GetAll();
+
+            var allPosts = posts.Select(post => new Post
+            {
+                PostId = post.PostId,
+                CreatedOn = post.CreatedOn,
+                Description = post.Description,
+                Title = post.Title,
+                FirstFile = post.FirstFile,
+                SecondFile = post.SecondFile,
+                ThirdFile = post.ThirdFile,
+                ModifiedOn = post.ModifiedOn,
+                CreatedBy = post.CreatedBy,
+                ModifiedBy = post.ModifiedBy,
+                IsActive = post.IsActive,
+                Category = post.Category
+
+            }).ToList() ?? new List<Post>();
+
+            PostVM postVM = new()
+            {
+                AllPosts = allPosts,
+            };
+
+            if (ModelState.IsValid)
+            {
+                return View(postVM);
+            }
             return View();
         }
 

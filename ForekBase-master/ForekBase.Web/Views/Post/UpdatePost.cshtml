@@ -16,6 +16,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css">
     <script src="https://kit.fontawesome.com/ae360af17e.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="~/utility/assets/css/post/StylePost.css">
+    <link rel="stylesheet" href="~/utility/assets/css/RichText/Style.css" />
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
+
 </head>
 
 <body>
@@ -28,21 +31,28 @@
                     <a href="#">The people's eye</a>
                 </div>
                 <ul class="sidebar-nav">
-                    <li class="sidebar-header">
-                        Admin Menu
-                    </li>
+
                     <li class="sidebar-item">
                         <a href="#" class="sidebar-link">
                             <i class="fa-solid fa-list pe-2"></i>
                             Dashboard
                         </a>
                     </li>
+
                     <li class="sidebar-item">
-                        <a href="#" class="sidebar-link">
-                            <i class="fas fa-newspaper pe-2"></i>
+                        <a href="#" class="sidebar-link collapsed" data-bs-target="#multi" data-bs-toggle="collapse"
+                           aria-expanded="false">
+                            <i class="fa-solid fa-book"></i>
                             Post
                         </a>
+                        <ul id="multi" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                            <li class="sidebar-item">
+                                <a href="@Url.Action("OnGetAllPosts", "Post")" class="sidebar-link">All Posts</a>
+                                <a href="@Url.Action("OnCreatePost", "Post")" class="sidebar-link">Create New Post</a>
+                            </li>
+                        </ul>
                     </li>
+
                     <li class="sidebar-item">
                         <a href="#" class="sidebar-link collapsed" data-bs-target="#pages" data-bs-toggle="collapse"
                            aria-expanded="false">
@@ -149,26 +159,67 @@
                                     <!-- Image Upload Box -->
                                     <div class="card">
                                         <div class="card-body">
+                                            <input asp-for="PostId" hidden />
+                                            <input asp-for="CreatedBy" hidden />
+                                            <input asp-for="CreatedOn" hidden />
+                                            <input asp-for="IsActive" hidden />
                                             <h5 class="card-title">Upload Image</h5>
                                             <!-- Your image upload form or input can go here -->
-                                            <input asp-for="LogoDoc" accept="image/*,.pdf" type="file" class="form-control mb-2" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])" class="form-control" />
+                                            <input asp-for="FirstFile" accept="image/*,.pdf" type="file" class="form-control mb-2" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])" class="form-control" />
+                                            <input asp-for="SecondFile" accept="image/*,.pdf" type="file" class="form-control mb-2" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])" class="form-control" />
+                                            <input asp-for="ThirdFile" accept="image/*,.pdf" type="file" class="form-control mb-2" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])" class="form-control" />
                                             <h5 class="card-title">Category</h5>
                                             <select asp-for="Category" class="form-control Type" required asp-items="Html.GetEnumSelectList<eCategory>()">
                                                 <option selected="selected" disabled value="">--Select--</option>
                                             </select>
                                             <!-- Text Boxes for Story -->
-                                            <input type="text" asp-for="Title" class="form-control mb-2" placeholder="News Title">
-                                            <textarea asp-for="Description" class="form-control" placeholder="Enter your news story" rows="10" cols="100"></textarea>
+                                            <h5 class="card-title">Title</h5>
+                                            <input asp-for="Title" class="form-control mb-2" placeholder="News Title">
+                                            <h5 class="card-title">Article</h5>
+                                            @* <div class="cont">
+                                                <div id="editor" contenteditable="false">
+                                                    <section id="toolbar">
+
+                                                        <div id="bold" class="icon fa fa-bold"></div>
+                                                        <div id="italic" class="icon fa fa-italic"></div>
+
+                                                        <div id="createLink" class="icon fa fa-link"></div>
+                                                        <div id="insertUnorderedList" class="icon fa fa-list"></div>
+                                                        <div id="insertOrderedList" class="icon fa fa-list-ol"></div>
+                                                        <div id="justifyLeft" class="icon fa fa-align-left"></div>
+                                                        <div id="justifyRight" class="icon fa fa-align-right"></div>
+                                                        <div id="justifyCenter" class="icon fa fa-align-center"></div>
+                                                        <div id="justifyFull" class="icon fa fa-align-justify"></div>
+
+                                                    </section>
+                                                    @* @Html.Raw(Model.Description) 
+                                                    
+                                                    <div id="page" contenteditable="true"></div>
+                                                    
+                                                </div>
+                                                
+                                            </div> *@
+                                            <textarea asp-for="Description" hidden id="Description" name="Description" class="form-control mb-2" placeholder="News Title"></textarea>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- Right Column -->
                                 <div class="col-md-3">
-                                    <!-- Card with Image, Title, and Description -->
-                                    <div class="card mb-6 body">
-                                        <div class="card-body mb-4">
-                                            <img id="output" src="~/Docs/@Model.PostPicture" class="form-control" />
+                                    <div class="slider">
+                                        <div class="card mb-6 body">
+                                            <div class="card-body mb-4">
+                                                <img id="output" src="~/Docs/@Model.FirstFile" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="card mb-6 body">
+                                            <div class="card-body mb-4">
+                                                <img id="output" src="~/Docs/@Model.SecondFile" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="card mb-6 body">
+                                            <div class="card-body mb-4">
+                                                <img id="output" src="~/Docs/@Model.ThirdFile" class="form-control" />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -220,6 +271,7 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/utility/assets/js/post/post.js"></script>
+    <script src="~/utility/assets/js/RichText/Index.js"></script>
 </body>
 
 </html>
