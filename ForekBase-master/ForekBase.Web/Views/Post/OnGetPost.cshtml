@@ -1,7 +1,6 @@
 ﻿@model ForekBase.Web.ViewModels.PostVM
 @using ForekBase.Domain.Entities.Enums
 
-
 @{
     Layout = null;
 }
@@ -10,13 +9,13 @@
 <html lang="en" data-bs-theme="dark">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css">
     <script src="https://kit.fontawesome.com/ae360af17e.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="~/utility/assets/css/post/StylePost.css">
+    <link rel="stylesheet" href="~/utility/assets/css/post/StylePost.css" />
+    <link rel="stylesheet" href="~/utility/assets/css/RichText/Style.css" />
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
 </head>
 
 <body>
@@ -51,7 +50,7 @@
                         </ul>
                     </li>
 
-                    <li class="sidebar-item">
+                    @* <li class="sidebar-item">
                         <a href="#" class="sidebar-link collapsed" data-bs-target="#pages" data-bs-toggle="collapse"
                            aria-expanded="false">
                             <i class="fa-solid fa-file-lines pe-2"></i>
@@ -74,7 +73,7 @@
                                 <a href="#" class="sidebar-link">Local</a>
                             </li>
                         </ul>
-                    </li>
+                    </li> *@
                     <li class="sidebar-item">
                         <a href="#" class="sidebar-link collapsed" data-bs-target="#posts" data-bs-toggle="collapse"
                            aria-expanded="false">
@@ -150,45 +149,126 @@
 
                     <form asp-action="OnGetPost" enctype="multipart/form-data">
 
+                        <div class="form-group col-md-12 mt-1">
+
+                            <a href="@Url.Action("OnUpdatePost", "Post", new { PostId = @Model.PostId})" class="btn btn-primary ">
+                                <span><i class="fa bi-folder2-open"></i>Update</span>
+                            </a>
+                           
+                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#publishModal">
+                                Publish
+                            </button>
+
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                Delete
+                            </button>
+                        </div>
+
                         <div class="container mt-5">
                             <div class="row">
                                 <!-- Left Column -->
-                                <div class="col-md-9">
+                                <div class="col-md-12">
                                     <!-- Image Upload Box -->
                                     <div class="card">
                                         <div class="card-body">
+
+                                            <h5 class="card-title">Image Description</h5>
+
+                                            <input type="text" asp-for="ImageDescription_1" readonly class="form-control mb-2" placeholder="Image Description">
+
+                                            <h5 class="card-title">Image Source</h5>
+
+                                            <input type="text" asp-for="ImageSource_1" readonly class="form-control mb-2" placeholder="Image Source">
+
+                                            <h5 class="card-title">Image Description</h5>
+
+                                            <input type="text" asp-for="ImageDescription_2" readonly class="form-control mb-2" placeholder="Image Description">
+
+                                            <h5 class="card-title">Image Source</h5>
+
+                                            <input type="text" asp-for="ImageSource_2" readonly class="form-control mb-2" placeholder="Image Source">
+
+                                            <hr />
+
+                                            <h5 class="card-title">Image Description</h5>
+
+                                            <input type="text" asp-for="ImageDescription_3" readonly class="form-control mb-2" placeholder="Image Description">
+
+                                            <h5 class="card-title">Image Source</h5>
+
+                                            <input type="text" asp-for="ImageSource_3" readonly class="form-control mb-2" placeholder="Image Source">
+
+                                            <h5 class="card-title">Block Quote</h5>
+                                            <textarea asp-for="BlockQuote" class="form-control mb-2" readonly placeholder="Block Quote"></textarea>
+
+
                                             <h5 class="card-title">Category</h5>
-                                            <input asp-for="Category" readonly class="form-control mb-2" placeholder="News Title">
+                                            <input asp-for="Category" readonly class="form-control mb-2">
                                             <!-- Text Boxes for Story -->
                                             <h5 class="card-title">Title</h5>
-                                            <input type="text" asp-for="Title" readonly class="form-control mb-2" placeholder="News Title">
+                                            <input type="text" asp-for="Title" readonly class="form-control mb-2">
                                             <h5 class="card-title">Article</h5>
-                                            @Html.Raw(Model.Description)
                                             
+
+                                            @* <div class="cont">
+                                                <div id="editor" contenteditable="false">
+                                                    <section id="toolbar">
+
+                                                        <div id="bold" class="icon fa fa-bold"></div>
+                                                        <div id="italic" class="icon fa fa-italic"></div>
+
+                                                        <div id="createLink" class="icon fa fa-link"></div>
+                                                        <div id="insertUnorderedList" class="icon fa fa-list"></div>
+                                                        <div id="insertOrderedList" class="icon fa fa-list-ol"></div>
+                                                        <div id="justifyLeft" class="icon fa fa-align-left"></div>
+                                                        <div id="justifyRight" class="icon fa fa-align-right"></div>
+                                                        <div id="justifyCenter" class="icon fa fa-align-center"></div>
+                                                        <div id="justifyFull" class="icon fa fa-align-justify"></div>
+
+                                                    </section>
+
+                                                    <div id="page" contenteditable="true">
+                                                        @Html.Raw(Model.Description)
+                                                    </div>
+
+                                                </div> *@
+
+                                            <textarea asp-for="Description" readonly name="Description" class="form-control mb-2" rows="24" cols="50" placeholder="News Title"></textarea>
 
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- Right Column -->
-                                <div class="col-md-3">
-                                    <!-- Card with Image, Title, and Description -->
-                                    <div class="card mb-6 body">
+  
+                                <div class="col-md-4">
+                                    <div class="card mb-3 body">
                                         <div class="card-body mb-4">
                                             <img id="output" src="~/Docs/@Model.FirstFile" class="form-control" />
                                         </div>
                                     </div>
                                 </div>
 
+
+                                <div class="col-md-4">
+                                    <div class="card mb-3 body">
+                                        <div class="card-body mb-4">
+                                            <img id="output" src="~/Docs/@Model.SecondFile" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-4">
+                                    <div class="card mb-3 body">
+                                        <div class="card-body mb-4">
+                                            <img id="output" src="~/Docs/@Model.ThirdFile" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+
+
                             </div>
 
-                            <div class="form-group col-md-12 mt-1">
-                                
-                                <a href="@Url.Action("UpdatePost", "Post", new { PostId = @Model.PostId})" class="btn btn-primary ">
-                                    <span><i class="fa bi-folder2-open"></i>Update</span>
-                                </a>
-                                <a class="btn btn-outline-danger float-end" asp-action="Index" asp-controller="Home"><i class="fa fa-window-close"></i> Exit</a>
-                            </div>
                         </div>
 
                     </form>
@@ -227,8 +307,57 @@
             </footer>
         </div>
     </div>
+
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Delete Post</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are sure you want to delete this post?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <a href="@Url.Action("OnRemovePost", "Post", new { PostId = @Model.PostId})" class="btn btn-danger ">
+                        <span><i class="fa bi-folder2-open"></i>Delete</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="publishModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Publish Post</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are sure you want to publish this post?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <a href="@Url.Action("OnPublishPost", "Post", new { PostId = @Model.PostId})" class="btn btn-danger ">
+                        <span><i class="fa bi-folder2-open"></i>Publish</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/utility/assets/js/post/post.js"></script>
+    <script src="~/utility/assets/js/post/post.js"></script>
+    <script src="https://kit.fontawesome.com/ae3393d1fa.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <script src="~/utility/assets/js/RichText/Index.js"></script>
+
 </body>
 
 </html>

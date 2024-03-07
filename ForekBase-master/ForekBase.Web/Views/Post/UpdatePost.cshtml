@@ -9,16 +9,13 @@
 <html lang="en" data-bs-theme="dark">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css">
     <script src="https://kit.fontawesome.com/ae360af17e.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="~/utility/assets/css/post/StylePost.css">
+    <link rel="stylesheet" href="~/utility/assets/css/post/StylePost.css" />
     <link rel="stylesheet" href="~/utility/assets/css/RichText/Style.css" />
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
-
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
 </head>
 
 <body>
@@ -53,7 +50,7 @@
                         </ul>
                     </li>
 
-                    <li class="sidebar-item">
+                    @* <li class="sidebar-item">
                         <a href="#" class="sidebar-link collapsed" data-bs-target="#pages" data-bs-toggle="collapse"
                            aria-expanded="false">
                             <i class="fa-solid fa-file-lines pe-2"></i>
@@ -76,7 +73,9 @@
                                 <a href="#" class="sidebar-link">Local</a>
                             </li>
                         </ul>
-                    </li>
+                    </li> *@
+
+
                     <li class="sidebar-item">
                         <a href="#" class="sidebar-link collapsed" data-bs-target="#posts" data-bs-toggle="collapse"
                            aria-expanded="false">
@@ -150,90 +149,169 @@
 
                     <!-- Table Element -->
 
-                    <form asp-action="UpdatePost" enctype="multipart/form-data">
-
+                    <form asp-action="OnUpdatePost" enctype="multipart/form-data">
                         <div class="container mt-5">
                             <div class="row">
                                 <!-- Left Column -->
-                                <div class="col-md-9">
+                                <div class="col-md-12 ">
                                     <!-- Image Upload Box -->
-                                    <div class="card">
+                                    <div class="card text-wrap:normal">
                                         <div class="card-body">
-                                            <input asp-for="PostId" hidden />
-                                            <input asp-for="CreatedBy" hidden />
-                                            <input asp-for="CreatedOn" hidden />
-                                            <input asp-for="IsActive" hidden />
                                             <h5 class="card-title">Upload Image</h5>
                                             <!-- Your image upload form or input can go here -->
-                                            <input asp-for="FirstFile" accept="image/*,.pdf" type="file" class="form-control mb-2" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])" class="form-control" />
-                                            <input asp-for="SecondFile" accept="image/*,.pdf" type="file" class="form-control mb-2" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])" class="form-control" />
-                                            <input asp-for="ThirdFile" accept="image/*,.pdf" type="file" class="form-control mb-2" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])" class="form-control" />
+
+                                            <input type="file" asp-for="FirstDoc"  accept="image/*,.pdf" class="form-control border-0 shadow mb-2" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])" />
+
+                                            <h5 class="card-title">Image Description</h5>
+
+                                            <input type="text" asp-for="ImageDescription_1"  class="form-control mb-2" placeholder="Image Description">
+
+                                            <h5 class="card-title">Image Source</h5>
+
+                                            <input type="text" asp-for="ImageSource_1"  class="form-control mb-2" placeholder="Image Source">
+
+
+                                            <br />
+
+                                            <h6 class="card-title text-danger">Do you want to add more file(s)?</h6>
+
+                                            <div class="row mt-4">
+
+                                                <div class="input-group mb-3 input1">
+                                                    <div class="form-check">
+                                                        <label class="form-check-label" for="isFileYes">Yes</label>
+
+                                                        <input type="radio" asp-for="IsAddFile" class="form-check-input m-1" value="true" id="isFileYes" required />
+
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <label class="form-check-label" for="isFileNo">No</label>
+                                                        <input type="radio" asp-for="IsAddFile" class="form-check-input m-1" value="false" id="isFileNo" required />
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div id="newFile">
+
+                                                <input type="file" asp-for="SecondDoc" accept="image/*,.pdf" class="form-control border-0 shadow mb-2" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])" />
+
+                                                <h5 class="card-title">Image Description</h5>
+
+                                                <input type="text" asp-for="ImageDescription_2" class="form-control mb-2" placeholder="Image Description">
+
+                                                <h5 class="card-title">Image Source</h5>
+
+                                                <input type="text" asp-for="ImageSource_2" class="form-control mb-2" placeholder="Image Source">
+
+                                                <hr />
+
+                                                <input type="file" asp-for="ThirdDoc" accept="image/*,.pdf" class="form-control border-0 shadow mb-2" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])" />
+
+                                                <h5 class="card-title">Image Description</h5>
+
+                                                <input type="text" asp-for="ImageDescription_3" class="form-control mb-2" placeholder="Image Description">
+
+                                                <h5 class="card-title">Image Source</h5>
+
+                                                <input type="text" asp-for="ImageSource_3" class="form-control mb-2" placeholder="Image Source">
+
+
+                                            </div>
+
+                                            <br />
+
                                             <h5 class="card-title">Category</h5>
-                                            <select asp-for="Category" class="form-control Type" required asp-items="Html.GetEnumSelectList<eCategory>()">
+
+                                            <select asp-for="Category" class="form-control Type" asp-items="Html.GetEnumSelectList<eCategory>()">
                                                 <option selected="selected" disabled value="">--Select--</option>
                                             </select>
+
+                                            <br />
                                             <!-- Text Boxes for Story -->
                                             <h5 class="card-title">Title</h5>
-                                            <input asp-for="Title" class="form-control mb-2" placeholder="News Title">
+                                            <input type="text" asp-for="Title"  class="form-control mb-2" placeholder="News Title">
+
+                                            <h5 class="card-title">Block Quote</h5>
+                                            <textarea asp-for="BlockQuote" class="form-control mb-2" placeholder="Block Quote"></textarea>
+
                                             <h5 class="card-title">Article</h5>
+
+                                            <!-- Text Editor -->
                                             @* <div class="cont">
-                                                <div id="editor" contenteditable="false">
-                                                    <section id="toolbar">
+                                            <div id="editor" contenteditable="false">
+                                            <section id="toolbar">
+                                            <div id="bold" class="icon fa fa-bold"></div>
+                                            <div id="italic" class="icon fa fa-italic"></div>
+                                            <div id="createLink" class="icon fa fa-link"></div>
+                                            <div id="insertUnorderedList" class="icon fa fa-list"></div>
+                                            <div id="insertOrderedList" class="icon fa fa-list-ol"></div>
+                                            <div id="justifyLeft" class="icon fa fa-align-left"></div>
+                                            <div id="justifyRight" class="icon fa fa-align-right"></div>
+                                            <div id="justifyCenter" class="icon fa fa-align-center"></div>
+                                            <div id="justifyFull" class="icon fa fa-align-justify"></div>
 
-                                                        <div id="bold" class="icon fa fa-bold"></div>
-                                                        <div id="italic" class="icon fa fa-italic"></div>
+                                            </section>
 
-                                                        <div id="createLink" class="icon fa fa-link"></div>
-                                                        <div id="insertUnorderedList" class="icon fa fa-list"></div>
-                                                        <div id="insertOrderedList" class="icon fa fa-list-ol"></div>
-                                                        <div id="justifyLeft" class="icon fa fa-align-left"></div>
-                                                        <div id="justifyRight" class="icon fa fa-align-right"></div>
-                                                        <div id="justifyCenter" class="icon fa fa-align-center"></div>
-                                                        <div id="justifyFull" class="icon fa fa-align-justify"></div>
+                                            <div id="page" contenteditable="true"></div>
+                                            </div>
 
-                                                    </section>
-                                                    @* @Html.Raw(Model.Description) 
-                                                    
-                                                    <div id="page" contenteditable="true"></div>
-                                                    
-                                                </div>
-                                                
                                             </div> *@
-                                            <textarea asp-for="Description" hidden id="Description" name="Description" class="form-control mb-2" placeholder="News Title"></textarea>
+
+
+                                            @* <h5 class="card-title">Schedule Article</h5>
+                                            <label for="dateInput">Select a date and time:</label> *@
+                                            <br />
+                                            @* <input asp-for="PublicationDate" type="datetime-local" id="dateInput" style="display:none;" /> *@
+
+                                            @* <button type="button" class="schedule btn btn-success save" id="scheduleButton">
+                                            Schedule
+                                            </button> *@
+
+                                            @* <textarea asp-for="Description"  hidden id="Description" name="Description" class="form-control mb-2" placeholder="News Title"></textarea> *@
+                                            <textarea asp-for="Description" name="Description" class="form-control mb-2" rows="24" cols="50" placeholder="Article"></textarea>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="card mb-3 body">
+                                        <div class="card-body mb-4">
+                                            <img src="~/src/assets/img/ImagePlaceholder.png" class="form-control" />
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="col-md-3">
-                                    <div class="slider">
-                                        <div class="card mb-6 body">
-                                            <div class="card-body mb-4">
-                                                <img id="output" src="~/Docs/@Model.FirstFile" class="form-control" />
-                                            </div>
-                                        </div>
-                                        <div class="card mb-6 body">
-                                            <div class="card-body mb-4">
-                                                <img id="output" src="~/Docs/@Model.SecondFile" class="form-control" />
-                                            </div>
-                                        </div>
-                                        <div class="card mb-6 body">
-                                            <div class="card-body mb-4">
-                                                <img id="output" src="~/Docs/@Model.ThirdFile" class="form-control" />
-                                            </div>
+
+                                <div class="col-md-4">
+                                    <div class="card mb-3 body">
+                                        <div class="card-body mb-4">
+                                            <img src="~/assets/img/ImagePlaceholder.png" class="form-control" />
                                         </div>
                                     </div>
                                 </div>
+
+
+                                <div class="col-md-4">
+                                    <div class="card mb-3 body">
+                                        <div class="card-body mb-4">
+                                            <img src="~/assets/img/ImagePlaceholder.png" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+
 
                             </div>
 
                             <div class="form-group col-md-12 mt-1">
-
-                                <button type="submit" class="btn btn-success save"><i class="fa fa-save"></i> Save</button>
-                                <a class="btn btn-outline-danger float-end" asp-action="Index"  asp-controller="Home"><i class="fa fa-window-close"></i> Exit</a>
+                                <button type="submit" onclick="getContent();" class="btn btn-success save"><i class="fa fa-save"></i> Save</button>
+                                <a class="btn btn-outline-danger float-end" asp-action="Index" asp-controller="Home"><i class="fa fa-window-close"></i> Exit</a>
                             </div>
-                        </div>
 
+                        </div>
                     </form>
+                    
                 </div>
             </main>
             <a href="#" class="theme-toggle">
@@ -269,9 +347,14 @@
             </footer>
         </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/utility/assets/js/post/post.js"></script>
+    <script src="~/utility/assets/js/post/post.js"></script>
+    <script src="https://kit.fontawesome.com/ae3393d1fa.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
     <script src="~/utility/assets/js/RichText/Index.js"></script>
+
 </body>
 
 </html>

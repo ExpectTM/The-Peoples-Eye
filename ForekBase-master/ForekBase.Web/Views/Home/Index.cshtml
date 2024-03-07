@@ -7,15 +7,20 @@
             <div class="latest_newsarea">
                 <span>Latest News</span>
                 <ul id="ticker01" class="news_sticker">
-                    @foreach (var post in Model.AllPosts)
+                    @foreach (var post in Model.AllPosts.Where(p => p.IsActive == true))
                     {
-                        <li><a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = post.PostId})"><img src="~/Docs/@post.FirstFile" alt="">@post.Title</a></li>
+                        <li>
+                            <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = post.PostId})">
+                                <img alt="Post Picture" src="~/Docs/@post.FirstFile"><span class="overlay"></span>
+                                @post.Title
+                            </a>
+                        </li>
                     }
                 </ul>
                 <div class="social_area">
                     <ul class="social_nav">
-                        <li class="facebook"><a href="#"></a></li>
-                        <li class="twitter"><a href="#"></a></li>
+                        <li class="facebook"><a href="https://www.facebook.com/61556669699132/posts/122098439192222323/?mibextid=rS40aB7S9Ucbxw6v"></a></li>
+                        <li class="twitter"><a href="https://twitter.com/peopleseyelive"></a></li>
                     </ul>
                 </div>
             </div>
@@ -26,10 +31,12 @@
     <div class="row">
         <div class="col-lg-8 col-md-8 col-sm-8">
             <div class="slick_slider">
-                @foreach (var story in Model.AllPosts)
+                @foreach (var story in Model.AllPosts.Where(p => p.IsActive == true))
                 {
                     <div class="single_iteam">
-                        <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = story.PostId})"> <img src="~/Docs/@story.FirstFile" alt=""></a>
+                        <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = story.PostId})">
+                            <img alt="Post Picture" style="max-width: 100%; height: auto;" src="~/Docs/@story.FirstFile">
+                        </a>
                         <div class="slider_article">
                             <h2><a class="slider_tittle" href="@Url.Action("OnGetPostPublic", "Post", new { PostId = story.PostId})">@story.Title</a></h2>
                         </div>
@@ -41,25 +48,24 @@
             <div class="latest_post">
                 <h2><span>Latest posts</span></h2>
                 <div class="latest_post_container">
-                    
+
                     <ul>
                         <li>
-                            @if (Model.AllPosts.Any())
+                            @if (Model.AllPosts.Where(p => p.IsActive == true).Any())
                             {
-                                var latestPosts = Model.AllPosts.Take(5);
+                                var latestPosts = Model.AllPosts.Where(p => p.IsActive == true).OrderByDescending(p => p.CreatedOn).Take(5);
 
                                 foreach (var latestpost in latestPosts)
                                 {
                                     <div class="media">
                                         <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = latestpost.PostId })" class="media-left">
-                                            <img alt="" src="~/Docs/@latestpost.FirstFile">
+                                            <img alt="Post Picture" src="~/Docs/@latestpost.FirstFile">
                                         </a>
 
                                         <div class="media-body">
-                                            <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = latestpost.PostId })" >@latestpost.Title</a>
+                                            <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = latestpost.PostId })">@latestpost.Title</a>
                                         </div>
                                     </div>
-
                                 }
                             }
                             else
@@ -68,7 +74,7 @@
                             }
                         </li>
                     </ul>
-                    
+
                 </div>
             </div>
         </div>
@@ -82,7 +88,7 @@
         <div class="col-lg-8 col-md-8 col-sm-8">
             <div class="left_content">
                 <div class="single_post_content">
-                <h2><span>Ads</span></h2>
+                    <h2><span>Ads</span></h2>
                 </div>
                 <div class="single_post_content">
                     <h2><span>Business</span></h2>
@@ -90,7 +96,7 @@
                         <ul class="business_catgnav  wow fadeInDown">
                             <li>
                                 @{
-                                    var latestPost = Model.AllPosts.OrderByDescending(p => p.CreatedOn)
+                                    var latestPost = Model.AllPosts.Where(p => p.IsActive == true).OrderByDescending(p => p.CreatedOn)
                                     .FirstOrDefault(p => p.Category == eCategory.Business);
                                 }
 
@@ -98,13 +104,15 @@
                                 {
                                     <figure class="bsbig_fig">
                                         <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = latestPost.PostId })" class="featured_img">
-                                            <img alt="" src="~/Docs/@latestPost.FirstFile"> <span class="overlay"></span>
+                                            <img alt="Post Picture" src="~/Docs/@latestPost.FirstFile">
+                                            <span class="overlay"></span>
+
                                         </a>
                                         <figcaption> <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = latestPost.PostId })">@latestPost.Title</a></figcaption>
                                         <p>
 
                                             @{
-                                                
+
                                                 var descriptionWords = latestPost.Description.Split(' ');
 
                                                 var shortenedDescription = string.Join(' ', descriptionWords.Take(30));
@@ -118,16 +126,16 @@
                                     </figure>
                                 }
                             </li>
-                            
+
                         </ul>
                     </div>
                     <div class="single_post_content_right">
                         <ul class="spost_nav">
                             <li>
-                                    @foreach (var item in Model.AllPosts.Take(4))
+                                @foreach (var item in Model.AllPosts.Where(p => p.IsActive == true).Take(4))
+                                {
+                                    if (item.Category == eCategory.Business)
                                     {
-                                        if (item.Category == eCategory.Business)
-                                        {
                                         <div class="media wow fadeInDown">
                                             <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = item.PostId })" class="media-left">
                                                 <img alt="" src="~/Docs/@item.FirstFile"> <span class="overlay"></span>
@@ -136,11 +144,11 @@
                                             <div class="media-body"> <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = item.PostId })" class="catg_title">@item.Title</a></div>
 
                                         </div>
-                                        }
                                     }
-                                   
+                                }
+
                             </li>
-                           
+
                         </ul>
                     </div>
                 </div>
@@ -154,7 +162,7 @@
                             <ul class="business_catgnav wow fadeInDown">
                                 <li>
                                     @{
-                                        var latestPolitics = Model.AllPosts.OrderByDescending(p => p.CreatedOn)
+                                        var latestPolitics = Model.AllPosts.Where(p => p.IsActive == true).OrderByDescending(p => p.CreatedOn)
                                         .FirstOrDefault(p => p.Category == eCategory.Politics);
                                     }
 
@@ -162,7 +170,7 @@
                                     {
                                         <figure class="bsbig_fig">
                                             <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = latestPolitics.PostId })" class="featured_img">
-                                                <img alt="" src="~/Docs/@latestPolitics.FirstFile"> <span class="overlay"></span>
+                                                <img alt="Post Picture" src="~/Docs/@latestPolitics.FirstFile"> <span class="overlay"></span>
                                             </a>
                                             <figcaption> <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = latestPolitics.PostId })">@latestPolitics.Title</a></figcaption>
                                             <p>
@@ -185,13 +193,13 @@
                             </ul>
                             <ul class="spost_nav">
                                 <li>
-                                    @foreach (var item in Model.AllPosts.Take(4))
+                                    @foreach (var item in Model.AllPosts.Where(p => p.IsActive == true).Take(4))
                                     {
                                         if (item.Category == eCategory.Politics)
                                         {
                                             <div class="media wow fadeInDown">
                                                 <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = item.PostId })" class="media-left">
-                                                    <img alt="" src="~/Docs/@item.FirstFile"> <span class="overlay"></span>
+                                                    <img alt="Post Picture" src="~/Docs/@item.FirstFile"> <span class="overlay"></span>
                                                 </a>
 
                                                 <div class="media-body"> <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = item.PostId })" class="catg_title">@item.Title</a></div>
@@ -200,7 +208,7 @@
                                         }
                                     }
                                 </li>
-                                
+
                             </ul>
                         </div>
                     </div>
@@ -210,15 +218,16 @@
                             <ul class="business_catgnav">
                                 <li>
                                     @{
-                                        var latestSport = Model.AllPosts.OrderByDescending(p => p.CreatedOn)
+                                        var latestSport = Model.AllPosts.Where(p => p.IsActive == true).OrderByDescending(p => p.CreatedOn)
                                         .FirstOrDefault(p => p.Category == eCategory.Sports);
                                     }
 
                                     @if (latestSport != null)
                                     {
                                         <figure class="bsbig_fig">
+
                                             <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = latestSport.PostId })" class="featured_img">
-                                                <img alt="" src="~/Docs/@latestSport.FirstFile"> <span class="overlay"></span>
+                                                <img alt="Post Picture" src="~/Docs/@latestSport.FirstFile"><span class="overlay"></span>
                                             </a>
                                             <figcaption> <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = latestSport.PostId })">@latestSport.Title</a></figcaption>
                                             <p>
@@ -241,13 +250,17 @@
                             </ul>
                             <ul class="spost_nav">
                                 <li>
-                                    @foreach (var item in Model.AllPosts.Take(4))
+                                    @foreach (var item in Model.AllPosts.Where(p => p.IsActive == true).Take(4))
                                     {
                                         if (item.Category == eCategory.Sports)
                                         {
                                             <div class="media wow fadeInDown">
                                                 <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = item.PostId })" class="media-left">
-                                                    <img alt="" src="~/Docs/@item.FirstFile"> <span class="overlay"></span>
+
+                                                    <img alt="Post Picture" src="~/Docs/@item.FirstFile">
+
+                                                    <span class="overlay"></span>
+
                                                 </a>
 
                                                 <div class="media-body"> <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = item.PostId })" class="catg_title">@item.Title</a></div>
@@ -256,12 +269,12 @@
                                         }
                                     }
                                 </li>
-                                
+
                             </ul>
                         </div>
                     </div>
                 </div>
-                
+
             </div>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-4">
@@ -270,40 +283,40 @@
                     <h2><span>ADS</span></h2>
                     <ul class="spost_nav">
                         <li>
-                                @* @if (Model.AllPosts.Any())
-                                {
-                                    var LatestPosts = Model.AllPosts.Take(5);
+                            @* @if (Model.AllPosts.Any())
+                            {
+                            var LatestPosts = Model.AllPosts.Take(5);
 
-                                    foreach (var latestPosts in LatestPosts)
-                                    {
-                                    <div class="media">
-                                        <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = latestPosts.PostId })" class="media-left">
-                                            <img alt="" src="~/Docs/@latestPosts.PostPicture">
-                                        </a>
+                            foreach (var latestPosts in LatestPosts)
+                            {
+                            <div class="media">
+                            <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = latestPosts.PostId })" class="media-left">
+                            <img alt="" src="~/Docs/@latestPosts.PostPicture">
+                            </a>
 
-                                        <div>
+                            <div>
 
-                                            @{
-                                                var titleWords = latestPosts.Title.Split(' ');
+                            @{
+                            var titleWords = latestPosts.Title.Split(' ');
 
-                                                var shortenedTitle = string.Join(' ', titleWords.Take(3));
+                            var shortenedTitle = string.Join(' ', titleWords.Take(3));
 
-                                                var finalTitle = $"{shortenedTitle}... See more";
+                            var finalTitle = $"{shortenedTitle}... See more";
 
-                                            }
+                            }
 
-                                            <div class="media-body">
-                                                <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = latestPosts.PostId })">@latestPosts.Title</a>
-                                            </div>
-                                        </div>
-                                    </div>
+                            <div class="media-body">
+                            <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = latestPosts.PostId })">@latestPosts.Title</a>
+                            </div>
+                            </div>
+                            </div>
 
-                                    }
-                                }
-                                else
-                                {
-                                <p>No posts available.</p>
-                                } *@
+                            }
+                            }
+                            else
+                            {
+                            <p>No posts available.</p>
+                            } *@
                         </li>
                     </ul>
                 </div>
@@ -319,7 +332,7 @@
                                 <li class="cat-item"><a href="#">Sports</a></li>
                                 <li class="cat-item"><a href="#">Politics</a></li>
                                 <li class="cat-item"><a href="#">Business</a></li>
-                                <li class="cat-item"><a href="#">Technology</a></li>  
+                                <li class="cat-item"><a href="#">Technology</a></li>
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="video">
@@ -329,35 +342,35 @@
                         </div>
                         <div role="tabpanel" class="tab-pane" id="comments">
                             @* <ul class="spost_nav">
-                                <li>
-                                    <div class="media wow fadeInDown">
-                                        <a href="pages/single_page.html" class="media-left"> <img alt="" src="~/utility/images/post_img1.jpg"> </a>
-                                        <div class="media-body"> <a href="pages/single_page.html" class="catg_title"> Aliquam malesuada diam eget turpis varius 1</a> </div>
-                                    </div>
-                                </li>
-                               
+                            <li>
+                            <div class="media wow fadeInDown">
+                            <a href="pages/single_page.html" class="media-left"> <img alt="" src="~/utility/images/post_img1.jpg"> </a>
+                            <div class="media-body"> <a href="pages/single_page.html" class="catg_title"> Aliquam malesuada diam eget turpis varius 1</a> </div>
+                            </div>
+                            </li>
+
                             </ul> *@
                         </div>
                     </div>
                 </div>
                 <div class="single_sidebar wow fadeInDown">
                     <h2><span>ADS</span></h2>
-                    
+
                 </div>
                 <div class="single_sidebar wow fadeInDown">
                     <h2><span>Category Archive</span></h2>
-                    <select asp-for="Category" class="catgArchive"  asp-items="Html.GetEnumSelectList<eCategory>()">
+                    <select asp-for="Category" class="catgArchive" asp-items="Html.GetEnumSelectList<eCategory>()">
                         <option selected="selected" disabled value="">Select Category</option>
                     </select>
                 </div>
                 <div class="single_sidebar wow fadeInDown">
                     <h2><span>Links</span></h2>
-                    <ul>
-                        <li><a href="#">Blog</a></li>
-                        <li><a href="#">Rss Feed</a></li>
-                        <li><a href="#">Login</a></li>
-                        <li><a href="#">Life &amp; Style</a></li>
-                    </ul>
+                    @* <ul>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Rss Feed</a></li>
+                    <li><a href="#">Login</a></li>
+                    <li><a href="#">Life &amp; Style</a></li>
+                    </ul> *@
                 </div>
                 <div class="single_post_content">
                     <h2><span>Ads</span></h2>

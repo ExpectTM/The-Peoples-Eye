@@ -15,8 +15,28 @@ namespace ForekBase.Web.ViewModels
         public string Description { get; set; }
         public bool IsAddFile { get; set; }
         public eCategory Category { get; set; }
-        #nullable enable
+        public DateTime PublicationDate { get; set; }
+        public bool IsPublished { get; set; } = false;
+        public string ImageDescription_1 { get; set; }
+        public string ImageSource_1 { get; set; }
+
+#nullable enable
+
+        public string? ImageDescription_2 { get; set; }
+
+        public string? ImageSource_2 { get; set; }
+
+        public string? ImageDescription_3 { get; set; }
+
+        public string? ImageSource_3 { get; set; }
+
+        public string? BlockQuote { get; set; }
+
+        public string? SenderEmail { get; set; }
+        public string? SenderMessage { get; set; }
+        public string? SenderName { get; set; }
         public string? FirstFile { get; set; }
+
         [NotMapped]
         public Microsoft.AspNetCore.Http.IFormFile? FirstDoc { get; set; }
         public string? SecondFile { get; set; }
@@ -25,7 +45,9 @@ namespace ForekBase.Web.ViewModels
         public string? ThirdFile { get; set; }
         [NotMapped]
         public Microsoft.AspNetCore.Http.IFormFile? ThirdDoc { get; set; }
+
         public List<Post>? AllPosts { get; set; }
+        public CommentVM? Comments { get; set; }
         #nullable disable
 
     }

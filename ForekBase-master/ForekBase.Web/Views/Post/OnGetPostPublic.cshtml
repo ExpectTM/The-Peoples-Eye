@@ -1,31 +1,47 @@
 ﻿@model ForekBase.Web.ViewModels.PostVM
 @using ForekBase.Domain.Entities.Enums
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css'>
+@* <link rel="stylesheet" href="./style.css"> *@
+@* <link rel="stylesheet" href="~/utility/assets/css/Comments/style.css" /> *@
 
+<style>
+    .textstyle {
+        background-color: white;
+        overflow: hidden;
+        resize: none;
+        border: none;
+    }
+</style>
 
 <section id="newsSection">
-
     <div class="row">
         <div class="col-lg-12 col-md-12">
             <div class="latest_newsarea">
                 <span>Latest News</span>
                 <ul id="ticker01" class="news_sticker">
-                    @foreach (var post in Model.AllPosts)
+                    @foreach (var post in Model.AllPosts.Where(p => p.IsActive == true))
                     {
-                        <li><a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = post.PostId })"><img src="~/Docs/@post.FirstFile" alt="">@post.Title</a></li>
+                        <li>
+                            <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = post.PostId})">
+                                <img alt="Post Picture" src="~/Docs/@post.FirstFile"><span class="overlay"></span>
+                                @post.Title
+                            </a>
+                        </li>
                     }
                 </ul>
                 <div class="social_area">
                     <ul class="social_nav">
-                        <li class="facebook"><a href="#"></a></li>
-                        <li class="twitter"><a href="#"></a></li>
-
+                        <li class="facebook"><a href="https://www.facebook.com/61556669699132/posts/122098439192222323/?mibextid=rS40aB7S9Ucbxw6v"></a></li>
+                        <li class="twitter"><a href="https://twitter.com/peopleseyelive"></a></li>
                     </ul>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
 <section id="contentSection">
     <div class="row">
         <div class="col-lg-8 col-md-8 col-sm-8">
@@ -36,7 +52,7 @@
                         <li><a href="#">@Model.Category</a></li>
                         <li class="active"></li>
                     </ol>
-                    <h1>@Model.Title</h1>
+                    <h2 style="font-size: 30px">@Model.Title</h2>
                     @{
                         DateTime createdOn = Model.CreatedOn;
 
@@ -71,44 +87,89 @@
                     <div class="single_page_content">
 
                         <div class="slick_slider">
-                            @if (Model.FirstFile !=  null )
+                            @if (Model.FirstFile != null)
                             {
                                 <div class="single_iteam">
-                                    <img src="~/Docs/@Model.FirstFile" alt="" />
+                                    <img src="~/Docs/@Model.FirstFile" style="max-width: 100%; height: auto;" alt="" />
+
                                 </div>
+
                             }
-                            
-                            @if(Model.SecondFile != null)
+
+                            @if (Model.SecondFile != null)
                             {
                                 <div class="single_iteam">
-                                    <img src="~/Docs/@Model.SecondFile" alt="" />
+                                    <img src="~/Docs/@Model.SecondFile" style="max-width: 100%; height: auto;" alt="" />
+                                    <br />
+                                    <i>@Model.ImageDescription_2</i>
+                                    <br />
+                                    <br />
+                                    <a href="#"><i class="fa fa-user"></i> Source: @Model.ImageSource_2</a>
                                 </div>
+
                             }
 
                             @if (Model.ThirdFile != null)
                             {
                                 <div class="single_iteam">
-                                    <img src="~/Docs/@Model.ThirdFile" alt="" />
+                                    <img src="~/Docs/@Model.ThirdFile" style="max-width: 100%; height: auto;" alt="" />
                                 </div>
+
                             }
 
                             <br />
-                            
+
+                            <i>@Model.ImageDescription_1</i>
+                            <br />
+                            <br />
+                            <a href="#"><i class="fa fa-user"></i> Source: @Model.ImageSource_1</a>
+
                         </div>
-                        @Html.Raw(@Model.Description)
+
+                           
+
+                        @* <br />
+                        @if (Model.SecondFile != null)
+                        {
+
+                            <i>@Model.ImageDescription_2</i>
+                            <br />
+                            <br />
+                            <a href="#"><i class="fa fa-user"></i> Source: @Model.ImageSource_2</a>
+
+
+                        }
+                        <br />
+                        @if (Model.ThirdFile != null)
+                        {
+                            <div> <i>@Model.ImageDescription_3</i></div>
+                            <br />
+                            <br />
+                            <a href="#"><i class="fa fa-user"></i> Source: @Model.ImageSource_3</a>
+                        } *@
+
+                        <hr />
+                        @if (Model.BlockQuote != null)
+                        {
+                            <textarea id="blockquote" class="textstyle" style=" border-left: 6px solid red; height: 500px; font-weight: bold;" disabled>@Model.BlockQuote</textarea>
+                        }
+
+                        <br />
+                        <hr />
+                        <textarea class="textstyle" id="descriptionTextarea" disabled>@Model.Description</textarea>
                     </div>
 
                     <div class="social_link">
                         <ul class="sociallink_nav">
-                            <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                            <li><a href="https://www.facebook.com/61556669699132/posts/122098439192222323/?mibextid=rS40aB7S9Ucbxw6v"><i class="fa fa-facebook"></i></a></li>
+                            <li><a href="https://twitter.com/peopleseyelive"><i class="fa fa-twitter"></i></a></li>
                         </ul>
                     </div>
                     <div class="related_post">
                         <h2>Related Post <i class="fa fa-thumbs-o-up"></i></h2>
                         <ul class="spost_nav wow fadeInDown animated">
 
-                            @foreach (var item in Model.AllPosts.Take(3))
+                            @foreach (var item in Model.AllPosts.Where(p => p.IsActive == true).Take(3))
                             {
 
                                 if (item.Category == eCategory.News)
@@ -159,7 +220,7 @@
 
                             @if (Model.AllPosts.Any())
                             {
-                                var latestPosts = Model.AllPosts.Take(5);
+                                var latestPosts = Model.AllPosts.Where(p => p.IsActive == true).Take(5).OrderByDescending(p => p.CreatedOn);
 
                                 foreach (var latestpost in latestPosts)
                                 {
@@ -197,7 +258,7 @@
                                 <li class="cat-item"><a href="#">Politics</a></li>
                                 <li class="cat-item"><a href="#">Business</a></li>
                                 <li class="cat-item"><a href="#">Technology</a></li>
-
+                            </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="video">
                             <div class="vide_area">
@@ -228,18 +289,20 @@
                     </select>
                 </div>
                 <div class="single_sidebar wow fadeInDown">
-                    <h2><span>Links</span></h2>
+                    @* <h2><span>Links</span></h2>
                     <ul>
-                        <li><a href="#">Blog</a></li>
-                        <li><a href="#">Rss Feed</a></li>
-                        <li><a href="#">Login</a></li>
-                        <li><a href="#">Life &amp; Style</a></li>
-                    </ul>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Rss Feed</a></li>
+                    <li><a href="#">Login</a></li>
+                    <li><a href="#">Life &amp; Style</a></li>
+                    </ul> *@
                 </div>
             </aside>
         </div>
     </div>
 </section>
+
+
 
 <script src="https://cdn.jsdelivr.net/npm/popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz4fnFO9gybB5IXNxFwWQfE7u8Lj+XJHAxKlXiG/8rsrtpb6PEdzD828Ii" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/" crossorigin="anonymous"></script>
@@ -253,5 +316,31 @@
         })
     });
 
+</script>
+
+<script>
+    var textarea = document.getElementById('descriptionTextarea');
+
+    textarea.style.height = 'auto';
+
+    textarea.style.height = (textarea.scrollHeight) + 'px';
+
+    textarea.addEventListener('input', function () {
+        textarea.style.height = 'auto';
+        textarea.style.height = (textarea.scrollHeight) + 'px';
+    });
+</script>
+
+<script>
+    var textarea = document.getElementById('blockquote');
+
+    textarea.style.height = 'auto';
+
+    textarea.style.height = (textarea.scrollHeight) + 'px';
+
+    textarea.addEventListener('input', function () {
+        textarea.style.height = 'auto';
+        textarea.style.height = (textarea.scrollHeight) + 'px';
+    });
 </script>
 

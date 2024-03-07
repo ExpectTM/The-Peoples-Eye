@@ -1,0 +1,101 @@
+@model ForekBase.Web.ViewModels.CommentVM
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css'><link rel="stylesheet" href="./style.css">
+<link rel="stylesheet" href="~/utility/assets/css/Comments/style.css" />
+
+<div class="block">
+	<div class="block-header">
+		<div class="title">
+			<h2>Comments</h2>
+			<div class="tag">12</div>
+		</div>
+		<div class="group-radio">
+			<span class="button-radio">
+				<input id="latest" name="latest" type="radio" checked>
+				<label for="latest">Latest</label>
+			</span>
+			<div class="divider"></div>
+			<span class="button-radio">
+				<input id="popular" name="latest" type="radio">
+				<label for="popular">Popular</label>
+			</span>
+		</div>
+	</div>
+
+	<form asp-action="OnCreateComment" asp-controller="Comment" method="post" >
+    <input asp-for="@Model.PostId" hidden />
+	<input asp-for="Name" class="form-control" type="text" placeholder="Name*" />
+	<br />
+	<input asp-for="Email" class="form-control" type="email" placeholder="Email*">
+	<br />
+	<div class="writing">
+
+				<textarea asp-for="Text" class="form-control"></textarea>
+
+		<div class="footer">
+			
+			<div class="group-button">
+               <button type="submit" class="btn primary">Send</button>
+            </div>
+		</div>
+	</div>
+	</form>
+    <div class="comment">
+        <div class="user-banner">
+            <div class="user">
+                <div class="avatar">
+                    <img src="https://randomuser.me/api/portraits/men/86.jpg">
+                    <span class="stat grey"></span>
+                </div>
+                <h5>@Model.Name</h5>
+            </div>
+            <button class="btn dropdown"><i class="ri-more-line"></i></button>
+        </div>
+        <div class="content">
+            <p>@Model.Text</p>
+        </div>
+        <div class="footer">
+            <button class="btn"><i class="ri-emotion-line"></i></button>
+            <div class="reactions">
+                <button class="btn react"><img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/160/apple/325/thumbs-up_1f44d.png" alt="">4</button>
+                <button class="btn react"><img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/160/apple/325/angry-face-with-horns_1f47f.png" alt="">1</button>
+            </div>
+            <div class="divider"></div>
+            @* <a href="#">Reply</a> *@
+            <div class="divider"></div>
+            <span class="is-mute">
+                @{
+                    DateTime commentedOn = Model.CreatedOn;
+
+                    TimeSpan Difference = DateTime.Now - commentedOn;
+
+                    string Time = "";
+
+                    if (Difference.TotalMinutes < 60)
+                    {
+                        Time = $"{(int)Difference.TotalMinutes} minutes ago";
+                    }
+
+                    else if (Difference.TotalHours < 24)
+                    {
+                        Time = $"{(int)Difference.TotalHours} hours ago";
+                    }
+                    else if (Difference.TotalDays < 20)
+                    {
+                        Time = $"{(int)Difference.TotalDays} days ago";
+                    }
+                    else
+                    {
+                        Time = commentedOn.ToString("MM/dd/yyyy hh:mm:ss tt");
+                    }
+                }
+                @Time
+            </span>
+        </div>
+    </div>
+
+
+</div>
+

@@ -20,7 +20,8 @@ namespace ForekBase.Domain.Entities.Enums
         Sports,
         Investigations,
         Environment,
-        ClimateChange
+        ClimateChange,
+        Opinion
     }
 
     

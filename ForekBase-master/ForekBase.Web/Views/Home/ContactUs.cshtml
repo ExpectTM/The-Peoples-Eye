@@ -7,15 +7,15 @@
                     <div class="latest_newsarea">
                         <span>Latest News</span>
                 <ul id="ticker01" class="news_sticker">
-                    @foreach (var post in Model.AllPosts)
+                    @foreach (var post in Model.AllPosts.Where(p => p.IsActive == true))
                     {
                         <li><a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = post.PostId})"><img src="~/Docs/@post.FirstFile" alt="">@post.Title</a></li>
                     }
                 </ul>
                         <div class="social_area">
                             <ul class="social_nav">
-                                <li class="facebook"><a href="#"></a></li>
-                                <li class="twitter"><a href="#"></a></li>
+                        <li class="facebook"><a href="https://www.facebook.com/61556669699132/posts/122098439192222323/?mibextid=rS40aB7S9Ucbxw6v"></a></li>
+                        <li class="twitter"><a href="https://twitter.com/peopleseyelive"></a></li>
                             </ul>
                         </div>
                     </div>
@@ -29,35 +29,36 @@
                         <div class="contact_area">
                             <h2>Contact Us</h2>
                             <!-- <p> </p> -->
-                            <form action="#" class="contact_form">
-                                <input class="form-control" type="text" placeholder="Name*">
-                                <input class="form-control" type="email" placeholder="Email*">
-                                <textarea class="form-control" cols="30" rows="10" placeholder="Message*"></textarea>
-                                <input type="submit" value="Send Message">
+                            <form asp-action="ContactUs" class="contact_form">
+                                <input asp-for="SenderName" class="form-control" type="text" placeholder="Name*">
+                                <input asp-for="SenderEmail" class="form-control" type="email" placeholder="Email*">
+                                <textarea asp-for="SenderMessage" class="form-control" cols="30" rows="10" placeholder="Message*"></textarea>
+                                <button type="submit" class="btn btn-success save"><i class="fa fa-save"></i>Send</button>
                             </form>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-4 col-sm-4">
-                    <aside class="right_content">
-                        <div class="single_sidebar">
-                            <h2><span>Popular Post</span></h2>
-                            <ul class="spost_nav">
+        <div class="col-lg-4 col-md-4 col-sm-4">
+            <aside class="right_content">
+                <div class="latest_post">
+                    <h2><span>Popular Post</span></h2>
+                    <ul class="spost_nav">
 
                         <li>
-                            @if (Model.AllPosts.Any())
+
+                            @if (Model.AllPosts.Where(p => p.IsActive == true).Any())
                             {
-                                var latestPosts = Model.AllPosts.Take(5);
+                                var latestPosts = Model.AllPosts.Take(5).OrderByDescending(p => p.CreatedOn);
 
                                 foreach (var latestpost in latestPosts)
                                 {
-                                    <div class="media">
+                                    <div class="media wow fadeInDown">
                                         <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = latestpost.PostId })" class="media-left">
                                             <img alt="" src="~/Docs/@latestpost.FirstFile">
                                         </a>
 
                                         <div class="media-body">
-                                            <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = latestpost.PostId })">@latestpost.Title</a>
+                                            <a class="catg_title" href="@Url.Action("OnGetPostPublic", "Post", new { PostId = latestpost.PostId })">@latestpost.Title</a>
                                         </div>
                                     </div>
 
@@ -67,10 +68,10 @@
                             {
                                 <p>No posts available.</p>
                             }
+
                         </li>
-                            </ul>
-                        </div>
-                    </aside>
+
+                    </ul>
                 </div>
             </div>
         </section>

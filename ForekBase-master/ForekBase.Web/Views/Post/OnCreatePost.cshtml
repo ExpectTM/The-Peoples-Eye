@@ -9,39 +9,13 @@
 <html lang="en" data-bs-theme="dark">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css">
     <script src="https://kit.fontawesome.com/ae360af17e.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="~/utility/assets/css/post/StylePost.css" />
-    <link rel="stylesheet" href="~/utility/assets/css/RichText/Style.css" />
+    @* <link rel="stylesheet" href="~/utility/assets/css/RichText/Style.css" /> *@
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
-
     <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
     <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
-
-    @* <script src="~/utility/assets/tinymce/js/tinymce/tinymce.min.js" referrerpolicy="origin"></script> *@
-    
-    @* <script src="https://cdn.tiny.cloud/1/cqjmaf90tbpe67jvb5m5pnc6qndbmyq6ozddc2ydwwsck4s2/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
-
-    <script>
-        tinymce.init({
-            selector: '#Description',
-            plugins: 'ai tinycomments mentions anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed permanentpen footnotes advtemplate advtable advcode editimage tableofcontents mergetags powerpaste tinymcespellchecker autocorrect a11ychecker typography inlinecss',
-            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | align lineheight | tinycomments | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
-            tinycomments_mode: 'embedded',
-            tinycomments_author: 'Author name',
-            mergetags_list: [
-                { value: 'First.Name', title: 'First Name' },
-                { value: 'Email', title: 'Email' },
-            ],
-            ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
-        });
-    </script> *@
-
 
 </head>
 
@@ -173,25 +147,31 @@
                     </div>
 
                     <!-- Table Element -->
-
-
                     <form asp-action="OnCreatePost" enctype="multipart/form-data">
-                        
                         <div class="container mt-5">
                             <div class="row">
                                 <!-- Left Column -->
-                                <div class="col-md-9">
+                                <div class="col-md-12 ">
                                     <!-- Image Upload Box -->
-                                    <div class="card">
+                                    <div class="card text-wrap:normal" >
                                         <div class="card-body">
                                             <h5 class="card-title">Upload Image</h5>
                                             <!-- Your image upload form or input can go here -->
 
-                                            <input type="file" asp-for="FirstDoc"  accept="image/*,.pdf" class="form-control border-0 shadow mb-2" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])" />
-                                           
+                                            <input type="file" asp-for="FirstDoc" required  accept="image/*,.pdf" class="form-control border-0 shadow mb-2" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])" />
+
+                                            <h5 class="card-title">Image Description</h5>
+
+                                            <input type="text" asp-for="ImageDescription_1" required class="form-control mb-2" placeholder="Image Description">
+
+                                            <h5 class="card-title">Image Source</h5>
+
+                                            <input type="text" asp-for="ImageSource_1" required class="form-control mb-2" placeholder="Image Source">
+
+                                            
                                             <br />
 
-                                            <h6 class="card-title">Do you want to add more file(s)?</h6>
+                                            <h6 class="card-title text-danger">Do you want to add more file(s)?</h6>
 
                                             <div class="row mt-4">
 
@@ -211,30 +191,56 @@
                                             </div>
 
                                             <div id="newFile">
+
                                                 <input type="file" asp-for="SecondDoc" accept="image/*,.pdf" class="form-control border-0 shadow mb-2" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])" />
+
+                                                <h5 class="card-title">Image Description</h5>
+
+                                                <input type="text" asp-for="ImageDescription_2" class="form-control mb-2" placeholder="Image Description">
+
+                                                <h5 class="card-title">Image Source</h5>
+
+                                                <input type="text" asp-for="ImageSource_2"  class="form-control mb-2" placeholder="Image Source">
+
+                                                <hr />
+
                                                 <input type="file" asp-for="ThirdDoc"  accept="image/*,.pdf" class="form-control border-0 shadow mb-2" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])" />
 
+                                                <h5 class="card-title">Image Description</h5>
+
+                                                <input type="text" asp-for="ImageDescription_3" class="form-control mb-2" placeholder="Image Description">
+
+                                                <h5 class="card-title">Image Source</h5>
+
+                                                <input type="text" asp-for="ImageSource_3"  class="form-control mb-2" placeholder="Image Source">
+
+
                                             </div>
+
                                             <br />
+
                                             <h5 class="card-title">Category</h5>
+
                                             <select asp-for="Category" class="form-control Type" required asp-items="Html.GetEnumSelectList<eCategory>()">
                                                 <option selected="selected" disabled value="">--Select--</option>
                                             </select>
+
                                             <br />
                                             <!-- Text Boxes for Story -->
                                             <h5 class="card-title">Title</h5>
-                                            <input type="text" asp-for="Title" class="form-control mb-2" placeholder="News Title">
+                                            <input type="text" asp-for="Title" required class="form-control mb-2" placeholder="News Title">
+
+                                            <h5 class="card-title">Block Quote</h5>
+                                            <textarea asp-for="BlockQuote" class="form-control mb-2"  placeholder="Block Quote"></textarea>
+
                                             <h5 class="card-title">Article</h5>
 
                                             <!-- Text Editor -->
-
-                                            <div class="cont">
+                                            @* <div class="cont">
                                                 <div id="editor" contenteditable="false">
                                                     <section id="toolbar">
-
                                                         <div id="bold" class="icon fa fa-bold"></div>
                                                         <div id="italic" class="icon fa fa-italic"></div>
-                                                        
                                                         <div id="createLink" class="icon fa fa-link"></div>
                                                         <div id="insertUnorderedList" class="icon fa fa-list"></div>
                                                         <div id="insertOrderedList" class="icon fa fa-list-ol"></div>
@@ -248,43 +254,51 @@
                                                     <div id="page" contenteditable="true"></div>
                                                 </div>
 
-                                            </div>
+                                            </div> *@
 
-                                            <textarea asp-for="Description" hidden id="Description" name="Description" class="form-control mb-2" placeholder="News Title"></textarea>
+
+                                            @* <h5 class="card-title">Schedule Article</h5>
+                                            <label for="dateInput">Select a date and time:</label> *@
+                                            <br />
+                                            @* <input asp-for="PublicationDate" type="datetime-local" id="dateInput" style="display:none;" /> *@
+
+                                            @* <button type="button" class="schedule btn btn-success save" id="scheduleButton">
+                                                Schedule 
+                                            </button> *@
+
+                                            @* <textarea asp-for="Description"  hidden id="Description" name="Description" class="form-control mb-2" placeholder="News Title"></textarea> *@
+                                            <textarea asp-for="Description"  name="Description" class="form-control mb-2" rows="24" cols="50" placeholder="Article"></textarea>
                                         </div>
                                     </div>
 
                                 </div>
-                                <!-- Right Column -->
-                                @* <div class="col-md-3">
-                                <!-- Card with Image, Title, and Description -->
-                                <div class="card mb-9 body">
-                                <div class="card-body mb-6">
-                                <img id="output" src="~/assets/img/ImagePlaceholder.png" class="form-control" />
-                                </div>
-                                </div>
-                                </div> *@
 
-                                <div class="col-md-3">
-                                    <div class="slider">
-                                        <div class="card mb-6 body">
+                                <div class="col-md-4">
+                                        <div class="card mb-3 body">
                                             <div class="card-body mb-4">
-                                                <img src="~/assets/img/ImagePlaceholder.png" class="form-control" />
+                                                <img src="~/src/assets/img/ImagePlaceholder.png" class="form-control" />
                                             </div>
                                         </div>
-                                        <div class="card mb-6 body">
-                                            <div class="card-body mb-4">
-                                                <img src="~/assets/img/ImagePlaceholder.png" class="form-control" />
-                                            </div>
-                                        </div>
-                                        <div class="card mb-6 body">
-                                            <div class="card-body mb-4">
-                                                <img src="~/assets/img/ImagePlaceholder.png" class="form-control" />
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
-                                
+
+
+                                <div class="col-md-4">
+                                        <div class="card mb-3 body">
+                                            <div class="card-body mb-4">
+                                                <img src="~/assets/img/ImagePlaceholder.png" class="form-control" />
+                                            </div>
+                                        </div>
+                                </div>
+
+
+                                <div class="col-md-4">
+                                        <div class="card mb-3 body">
+                                            <div class="card-body mb-4">
+                                                <img src="~/assets/img/ImagePlaceholder.png" class="form-control" />
+                                            </div>
+                                        </div>
+                                </div>
+ 
 
                             </div>
 
@@ -331,12 +345,22 @@
         </div>
     </div>
 
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/utility/assets/js/post/post.js"></script>
     <script src="https://kit.fontawesome.com/ae3393d1fa.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
-    <script src="~/utility/assets/js/RichText/Index.js"></script>
+@*     <script src="~/utility/assets/js/RichText/Index.js"></script> *@
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#scheduleButton").click(function () {
+                $("#dateInput").toggle();
+            });
+        });
+    </script>
 
     <script type="text/javascript">
 

@@ -85,32 +85,28 @@ namespace ForekBase.Web.Controllers
             return View();
         }
 
-        public IActionResult OnCommentPost()
-        {
-            return View();
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> OnCommentPost(CommentVM commentVM)
+        public async Task<IActionResult> OnCreateComment(PostVM commentVM)
         {
 
             Comment? comment = new()
             {
                 Id = Guid.NewGuid(),
-                Text = commentVM.Text,
-                Name = commentVM.Name,
-                Email = commentVM.Email,
-                CreatedBy = commentVM.CreatedBy,
-                CreatedOn = commentVM.CreatedOn,
-                IsActive = commentVM.IsActive,
+                PostedDate = DateTime.Now,
+                Text = commentVM.Comments.Text,
+                Name = commentVM.Comments.Name,
+                Email = commentVM.Comments.Email,
+                CreatedBy = "User",
+                CreatedOn = DateTime.Now,
+                IsActive = true,
+                PostId = commentVM.PostId
 
             };
 
             if (comment != null)
             {
-                if (ModelState.IsValid)
-                {
+
                     _unitOfWork.Comment.Add(comment);
 
                     _unitOfWork.Save();
@@ -118,7 +114,7 @@ namespace ForekBase.Web.Controllers
                     TempData["success"] = "Saved successfully";
 
                     return RedirectToAction("Index", "Home");
-                }
+
             }
 
             return View();

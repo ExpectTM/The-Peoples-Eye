@@ -28,5 +28,7 @@ namespace ForekBase.Web.ViewModels
         public Guid PostId { get; set; }
 
         public Post? Post { get; set; }
+
+        public List<Comment>? AllComments { get; set; }
     }
 }
