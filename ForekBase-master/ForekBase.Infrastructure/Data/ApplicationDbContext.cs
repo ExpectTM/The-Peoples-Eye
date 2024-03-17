@@ -51,6 +51,7 @@ namespace ForekBase.Infrastructure.Data
         /// </value>
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Post> Posts { get; set; }
+        public DbSet<Subscriber> Subscribers { get; set; }
     }
 
 }

@@ -30,9 +30,9 @@ namespace ForekBase.Domain.Entities
 
         public bool IsPublished { get; set; } = false;
 
-        public string ImageDescription_1 { get; set; }
+        public string? ImageDescription_1 { get; set; }
 
-        public string ImageSource_1 { get; set; }
+        public string? ImageSource_1 { get; set; }
 
         public string? ImageDescription_2 { get; set; }
 

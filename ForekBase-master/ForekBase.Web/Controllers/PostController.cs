@@ -7,6 +7,7 @@ using ForekBase.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
+using System.Text;
 using static System.Net.Mime.MediaTypeNames;
 
 #endregion
@@ -26,7 +27,7 @@ namespace ForekBase.Web.Controllers
 
         public IActionResult OnGetAllPosts()
         {
-            IEnumerable<Post> posts = _unitOfWork.Post.GetAll(p => p.IsActive == true ) ?? throw new ArgumentNullException(nameof(posts), "Posts not found");
+            IEnumerable<Post> posts = _unitOfWork.Post.GetAll(p => p.IsActive == true) ?? throw new ArgumentNullException(nameof(posts), "Posts not found");
 
             var postVms = new List<PostVM>();
 
@@ -135,7 +136,7 @@ namespace ForekBase.Web.Controllers
 
             }).ToList() ?? new List<Post>();
 
-            var allComments = comments.Select( commentpost => new Comment
+            var allComments = comments.Select(commentpost => new Comment
             {
                 PostId = commentpost.PostId,
                 CreatedOn = commentpost.CreatedOn,
@@ -147,7 +148,7 @@ namespace ForekBase.Web.Controllers
                 Text = commentpost.Text,
                 Name = commentpost.Name,
                 Email = commentpost.Email
-                
+
 
             }).ToList() ?? new List<Comment>();
 
@@ -179,7 +180,7 @@ namespace ForekBase.Web.Controllers
                 {
                     AllComments = allComments
                 }
-                
+
             };
 
             if (ModelState.IsValid)
@@ -251,7 +252,7 @@ namespace ForekBase.Web.Controllers
 
         }
 
-        public IActionResult UpdatePost(Guid PostId)
+        public IActionResult OnUpdatePost(Guid PostId)
         {
             Post? post = _unitOfWork.Post.Get(u => u.PostId == PostId) ?? throw new ArgumentNullException(nameof(post), "Post not found");
 
@@ -283,7 +284,7 @@ namespace ForekBase.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> OnUpdatePost(PostVM postVM)
+        public IActionResult OnUpdatePost(PostVM postVM)
         {
 
             if (postVM is null)
@@ -292,26 +293,26 @@ namespace ForekBase.Web.Controllers
             }
 
 
-            if(postVM.FirstDoc != null)
-            {
-                var Doc = await UploadFile(postVM);
+            //if(postVM.FirstDoc != null)
+            //{
+            //    var Doc = await UploadFile(postVM);
 
-                postVM.FirstFile = Doc.FirstFile;
-            }
+            //    postVM.FirstFile = Doc.FirstFile;
+            //}
 
-            if (postVM.SecondDoc != null)
-            {
-                var Doc = await UploadFile(postVM);
+            //if (postVM.SecondDoc != null)
+            //{
+            //    var Doc = await UploadFile(postVM);
 
-                postVM.FirstFile = Doc.SecondFile;
-            }
+            //    postVM.FirstFile = Doc.SecondFile;
+            //}
 
-            if (postVM.ThirdDoc != null)
-            {
-                var Doc = await UploadFile(postVM);
+            //if (postVM.ThirdDoc != null)
+            //{
+            //    var Doc = await UploadFile(postVM);
 
-                postVM.FirstFile = Doc.ThirdFile;
-            }
+            //    postVM.FirstFile = Doc.ThirdFile;
+            //}
 
             Post post = new()
             {
@@ -346,7 +347,7 @@ namespace ForekBase.Web.Controllers
 
                 TempData["success"] = "Saved successfully";
 
-                return RedirectToAction("Index", "Home");
+                return  RedirectToAction("Index", "Home");
             }
 
 
@@ -373,34 +374,6 @@ namespace ForekBase.Web.Controllers
             return View();
         }
 
-        public void PublishPosts()
-        {
-            IEnumerable<Post> postsToPublish = _unitOfWork.Post
-                .GetAll()
-                .Where(p => p.IsActive == true && !p.IsPublished);
-
-            if (!postsToPublish.Any())
-            {
-                throw new InvalidOperationException("No unpublished posts found.");
-            }
-
-            DateTime currentUtcTime = DateTime.UtcNow;
-
-            foreach (var post in postsToPublish)
-            {
-                if (post.PublicationDate == currentUtcTime)
-                {
-                    post.IsPublished = true;
-                    _unitOfWork.Post.Update(post);
-                }
-            }
-
-            _unitOfWork.Save();
-
-        }
-
-
-
 
         public IActionResult OnPublishPost(Guid postId)
         {
@@ -422,8 +395,8 @@ namespace ForekBase.Web.Controllers
             return View();
         }
 
-            public IActionResult OnGetCategory(eCategory category)
-            {
+        public IActionResult OnGetCategory(eCategory category)
+        {
             var posts = _unitOfWork.Post.GetAll();
 
             var allPosts = posts.Select(post => new Post
@@ -470,17 +443,35 @@ namespace ForekBase.Web.Controllers
         {
             if (string.IsNullOrEmpty(KeyWord))
             {
-                TempData["error"]  = "Please enter a search keyword.";
+                TempData["error"] = "Please enter a search keyword.";
 
                 return View();
             }
 
-            
+
             var posts = _unitOfWork.Post.GetAll()
                                         .Where(p => p.Title == KeyWord)
                                         .ToList();
 
             return View(posts);
+        }
+
+        public static void OnSendSubscriberNotification(string to)
+        {
+            StringBuilder builder = new();
+
+            var urlRef = "https://peopleseye.co.za/";
+
+            builder.Append($"Hello People's eyes Subscriber");
+
+            builder.AppendLine();
+
+            builder.Append($"Check out our latest stories on {urlRef}");
+
+            builder.AppendLine();
+
+            Application.Common.Utility.SD.OnSendMailNotification(to, "The People's eyes", builder.ToString(), "The People's eyes");
+
         }
 
         #endregion

@@ -159,7 +159,7 @@
                                         <div class="card-body">
                                             
                                             <div class="btn btn-group">
-                                                <a class="text-primary " asp-action="OnCreatePost" asp-route-TeamId="@ViewData["PostId"]">
+                                                <a class="text-primary " asp-action="OnCreatePost">
                                                     <i class="fas fa-newspaper pe-2"></i> Add New Post
                                                 </a>
                                             </div>
@@ -204,7 +204,7 @@
 
                                                                         <td>
 
-                                                                            <a href="@Url.Action("OnGetPost", "Post", new { PostId = post.PostId})" class="link-primary">
+                                                                            <a href="@Url.Action("OnUpdatePost", "Post", new { PostId = post.PostId})" class="link-primary">
                                                                                 open
                                                                             </a>
 

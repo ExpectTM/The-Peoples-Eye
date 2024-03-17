@@ -11,6 +11,7 @@ namespace ForekBase.Application.Common.Interfaces
         INewsRepository News { get; }
         IPostRepository Post { get; }
         ICommentRepository Comment { get; }
+        ISubscriberRepository Subscriber { get; }
         void Save();
 
     }

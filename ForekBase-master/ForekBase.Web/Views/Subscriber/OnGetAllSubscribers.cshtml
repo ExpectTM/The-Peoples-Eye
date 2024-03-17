@@ -1,5 +1,5 @@
-﻿@model ForekBase.Web.ViewModels.PostVM
-@using ForekBase.Domain.Entities.Enums
+﻿@model IEnumerable<ForekBase.Web.ViewModels.SubscriberVM>
+
 
 @{
     Layout = null;
@@ -9,12 +9,14 @@
 <html lang="en" data-bs-theme="dark">
 
 <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
     <script src="https://kit.fontawesome.com/ae360af17e.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="~/utility/assets/css/post/StylePost.css" />
-    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
-    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
-    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
+    <link rel="stylesheet" href="~/utility/assets/css/post/StylePost.css">
 </head>
 
 <body>
@@ -49,7 +51,7 @@
                         </ul>
                     </li>
 
-                    @* <li class="sidebar-item">
+                    <li class="sidebar-item">
                         <a href="#" class="sidebar-link collapsed" data-bs-target="#pages" data-bs-toggle="collapse"
                            aria-expanded="false">
                             <i class="fa-solid fa-file-lines pe-2"></i>
@@ -72,7 +74,7 @@
                                 <a href="#" class="sidebar-link">Local</a>
                             </li>
                         </ul>
-                    </li> *@
+                    </li>
                     <li class="sidebar-item">
                         <a href="#" class="sidebar-link collapsed" data-bs-target="#posts" data-bs-toggle="collapse"
                            aria-expanded="false">
@@ -141,28 +143,10 @@
             <main class="content px-3 py-2">
                 <div class="container-fluid">
                     <div class="mb-3">
-                        <h4>Post Information</h4>
+                        <h4>Subscribers</h4>
                     </div>
 
                     <!-- Table Element -->
-
-
-                    <form asp-action="OnGetPost" enctype="multipart/form-data">
-
-                        <div class="form-group col-md-12 mt-1">
-
-                            <a href="@Url.Action("OnUpdatePost", "Post", new { PostId = @Model.PostId})" class="btn btn-primary ">
-                                <span><i class="fa bi-folder2-open"></i>Update</span>
-                            </a>
-                           
-                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#publishModal">
-                                Publish
-                            </button>
-
-                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                Delete
-                            </button>
-                        </div>
 
                         <div class="container mt-5">
                             <div class="row">
@@ -172,83 +156,87 @@
                                     <div class="card">
                                         <div class="card-body">
 
-                                            <h5 class="card-title">Image Description</h5>
+                                            <div class="btn btn-group">
 
-                                            <input type="text" asp-for="ImageDescription_1" readonly class="form-control mb-2" placeholder="Image Description">
+                                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#notifyModal">
+                                                Send Notification
+                                            </button>
 
-                                            <h5 class="card-title">Image Source</h5>
+                                            </div>
 
-                                            <input type="text" asp-for="ImageSource_1" readonly class="form-control mb-2" placeholder="Image Source">
+                                            <div class="col-xl-12">
+                                                <div class="card mb-4">
+                                                    <div class="card-header">
+                                                        <i class="fas fa-newspaper pe-2"></i>
+                                                        <span class="text-white">All Subscribers<span class="text-bold"></span></span>
+                                                    </div>
 
-                                            <h5 class="card-title">Image Description</h5>
+                                                    <div class="card-body">
+                                                        <table class="table mr-5 ml-5 table-striped" id="datatablesSimple">
+                                                            <thead class="head">
+                                                                <tr>
+                                                                    <th class="text-white" width="5%">
 
-                                            <input type="text" asp-for="ImageDescription_2" readonly class="form-control mb-2" placeholder="Image Description">
+                                                                    </th>
 
-                                            <h5 class="card-title">Image Source</h5>
+                                                                    <th class="text-white">
+                                                                        Email
+                                                                    </th>
 
-                                            <input type="text" asp-for="ImageSource_2" readonly class="form-control mb-2" placeholder="Image Source">
+                                                                    <th class="text-white">
+                                                                        Subscribed?
+                                                                    </th>
 
-                                            <hr />
+                                                                    <th class="text-white">
+                                                                        Subscribed Date
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @foreach (var subscribe in Model)
+                                                                {
+                                                                    <tr>
 
-                                            <h5 class="card-title">Image Description</h5>
+                                                                        <td>
 
-                                            <input type="text" asp-for="ImageDescription_3" readonly class="form-control mb-2" placeholder="Image Description">
+                                                                            <a href="@Url.Action("OnUpdateSubscriber", "Subscriber", new { SubscriberId = subscribe.SubscriberID})" class="link-primary">
+                                                                                open
+                                                                            </a>
 
-                                            <h5 class="card-title">Image Source</h5>
+                                                                        </td>
 
-                                            <input type="text" asp-for="ImageSource_3" readonly class="form-control mb-2" placeholder="Image Source">
+                                                                        <td>
+                                                                            @subscribe.Email
+                                                                        </td>
 
-                                            <h5 class="card-title">Block Quote</h5>
-                                            <textarea asp-for="BlockQuote" class="form-control mb-2" readonly placeholder="Block Quote"></textarea>
+                                                                        <td>
+                                                                            @subscribe.IsSubscribed
+                                                                        </td>
 
+                                                                        <td>
+                                                                            @subscribe.CreatedOn
+                                                                        </td>
 
-                                            <h5 class="card-title">Category</h5>
-                                            <input asp-for="Category" readonly class="form-control mb-2">
-                                            <!-- Text Boxes for Story -->
-                                            <h5 class="card-title">Title</h5>
-                                            <input type="text" asp-for="Title" readonly class="form-control mb-2">
-                                            <h5 class="card-title">Article</h5>
-                                            
+                                                                      
+                                                                    </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                                            <textarea id="mytextarea" asp-for="Description" name="Description"  class="form-control mb-2" placeholder="Article"></textarea>
 
                                         </div>
                                     </div>
                                 </div>
-
-  
-                                <div class="col-md-4">
-                                    <div class="card mb-3 body">
-                                        <div class="card-body mb-4">
-                                            <img id="output" src="~/Docs/@Model.FirstFile" class="form-control" />
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <div class="col-md-4">
-                                    <div class="card mb-3 body">
-                                        <div class="card-body mb-4">
-                                            <img id="output" src="~/Docs/@Model.SecondFile" class="form-control" />
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <div class="col-md-4">
-                                    <div class="card mb-3 body">
-                                        <div class="card-body mb-4">
-                                            <img id="output" src="~/Docs/@Model.ThirdFile" class="form-control" />
-                                        </div>
-                                    </div>
-                                </div>
-
 
                             </div>
 
+                            <div class="form-group col-md-12 mt-1">
+                                <a class="btn btn-outline-danger" asp-action="Index" asp-controller="Home"><i class="fa fa-window-close"></i> Exit</a>
+                            </div>
                         </div>
-
-                    </form>
                 </div>
             </main>
             <a href="#" class="theme-toggle">
@@ -285,67 +273,36 @@
         </div>
     </div>
 
-
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="notifyModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Delete Post</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Notifications</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Are sure you want to delete this post?
+
+                    Are sure you want to send notification to all subscribers?
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <a href="@Url.Action("OnRemovePost", "Post", new { PostId = @Model.PostId})" class="btn btn-danger ">
-                        <span><i class="fa bi-folder2-open"></i>Delete</span>
-                    </a>
+                    <form asp-controller="Subscriber" asp-action="NotifySubscribers">
+                        <button type="submit" class="btn btn-success save">Notify</button>
+                    </form>
+                  
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="publishModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Publish Post</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Are sure you want to publish this post?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <a href="@Url.Action("OnPublishPost", "Post", new { PostId = @Model.PostId})" class="btn btn-danger ">
-                        <span><i class="fa bi-folder2-open"></i>Publish</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/utility/assets/js/post/post.js"></script>
-    <script src="https://kit.fontawesome.com/ae3393d1fa.js" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
-
-
-    <script src="https://cdn.tiny.cloud/1/cqjmaf90tbpe67jvb5m5pnc6qndbmyq6ozddc2ydwwsck4s2/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
-
-    <script>
-        tinymce.init({
-            selector: '#mytextarea',
-            plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount linkchecker',
-            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
-        });
-    </script> 
-
+    <script src="/utility/assets/js/post/post.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
+    <script src="/utility/assets/js/datatables-simple-demo.js"></script>
 </body>
 
 </html>
+
 

@@ -147,6 +147,13 @@
                         <h4>Update Post</h4>
                     </div>
 
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#publishModal">
+                        Publish
+                    </button>
+
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        Delete
+                    </button>
                     <!-- Table Element -->
 
                     <form asp-action="OnUpdatePost" enctype="multipart/form-data">
@@ -160,7 +167,13 @@
                                             <h5 class="card-title">Upload Image</h5>
                                             <!-- Your image upload form or input can go here -->
 
-                                            <input type="file" asp-for="FirstDoc"  accept="image/*,.pdf" class="form-control border-0 shadow mb-2" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])" />
+                                            <input asp-for="PostId" hidden />
+
+                                            <input asp-for="CreatedBy" hidden />
+
+                                            <input asp-for="CreatedOn" hidden />
+
+                                            <input asp-for="FirstFile"  accept="image/*,.pdf" class="form-control border-0 shadow mb-2" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])" />
 
                                             <h5 class="card-title">Image Description</h5>
 
@@ -194,7 +207,7 @@
 
                                             <div id="newFile">
 
-                                                <input type="file" asp-for="SecondDoc" accept="image/*,.pdf" class="form-control border-0 shadow mb-2" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])" />
+                                                <input asp-for="SecondFile" accept="image/*,.pdf" class="form-control border-0 shadow mb-2" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])" />
 
                                                 <h5 class="card-title">Image Description</h5>
 
@@ -206,7 +219,7 @@
 
                                                 <hr />
 
-                                                <input type="file" asp-for="ThirdDoc" accept="image/*,.pdf" class="form-control border-0 shadow mb-2" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])" />
+                                                <input asp-for="ThirdFile" accept="image/*,.pdf" class="form-control border-0 shadow mb-2" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])" />
 
                                                 <h5 class="card-title">Image Description</h5>
 
@@ -237,48 +250,19 @@
 
                                             <h5 class="card-title">Article</h5>
 
-                                            <!-- Text Editor -->
-                                            @* <div class="cont">
-                                            <div id="editor" contenteditable="false">
-                                            <section id="toolbar">
-                                            <div id="bold" class="icon fa fa-bold"></div>
-                                            <div id="italic" class="icon fa fa-italic"></div>
-                                            <div id="createLink" class="icon fa fa-link"></div>
-                                            <div id="insertUnorderedList" class="icon fa fa-list"></div>
-                                            <div id="insertOrderedList" class="icon fa fa-list-ol"></div>
-                                            <div id="justifyLeft" class="icon fa fa-align-left"></div>
-                                            <div id="justifyRight" class="icon fa fa-align-right"></div>
-                                            <div id="justifyCenter" class="icon fa fa-align-center"></div>
-                                            <div id="justifyFull" class="icon fa fa-align-justify"></div>
+                                            <textarea id="mytextarea" asp-for="Description" name="Description" class="form-control mb-2" placeholder="Article"></textarea>
 
-                                            </section>
-
-                                            <div id="page" contenteditable="true"></div>
-                                            </div>
-
-                                            </div> *@
-
-
-                                            @* <h5 class="card-title">Schedule Article</h5>
-                                            <label for="dateInput">Select a date and time:</label> *@
-                                            <br />
-                                            @* <input asp-for="PublicationDate" type="datetime-local" id="dateInput" style="display:none;" /> *@
-
-                                            @* <button type="button" class="schedule btn btn-success save" id="scheduleButton">
-                                            Schedule
-                                            </button> *@
-
-                                            @* <textarea asp-for="Description"  hidden id="Description" name="Description" class="form-control mb-2" placeholder="News Title"></textarea> *@
-                                            <textarea asp-for="Description" name="Description" class="form-control mb-2" rows="24" cols="50" placeholder="Article"></textarea>
+                                           
                                         </div>
                                     </div>
 
                                 </div>
 
+
                                 <div class="col-md-4">
                                     <div class="card mb-3 body">
                                         <div class="card-body mb-4">
-                                            <img src="~/src/assets/img/ImagePlaceholder.png" class="form-control" />
+                                            <img id="output" src="~/Docs/@Model.FirstFile" class="form-control" />
                                         </div>
                                     </div>
                                 </div>
@@ -287,7 +271,7 @@
                                 <div class="col-md-4">
                                     <div class="card mb-3 body">
                                         <div class="card-body mb-4">
-                                            <img src="~/assets/img/ImagePlaceholder.png" class="form-control" />
+                                            <img id="output" src="~/Docs/@Model.SecondFile" class="form-control" />
                                         </div>
                                     </div>
                                 </div>
@@ -296,7 +280,7 @@
                                 <div class="col-md-4">
                                     <div class="card mb-3 body">
                                         <div class="card-body mb-4">
-                                            <img src="~/assets/img/ImagePlaceholder.png" class="form-control" />
+                                            <img id="output" src="~/Docs/@Model.ThirdFile" class="form-control" />
                                         </div>
                                     </div>
                                 </div>
@@ -305,7 +289,7 @@
                             </div>
 
                             <div class="form-group col-md-12 mt-1">
-                                <button type="submit" onclick="getContent();" class="btn btn-success save"><i class="fa fa-save"></i> Save</button>
+                                <button type="submit" onclick="getContent();" class="btn btn-success save"><i class="fa fa-save"></i>Update</button>
                                 <a class="btn btn-outline-danger float-end" asp-action="Index" asp-controller="Home"><i class="fa fa-window-close"></i> Exit</a>
                             </div>
 
@@ -348,6 +332,48 @@
         </div>
     </div>
 
+
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Delete Post</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are sure you want to delete this post?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <a href="@Url.Action("OnRemovePost", "Post", new { PostId = @Model.PostId})" class="btn btn-danger ">
+                        <span><i class="fa bi-folder2-open"></i>Delete</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="publishModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Publish Post</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are sure you want to publish this post?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <a href="@Url.Action("OnPublishPost", "Post", new { PostId = @Model.PostId})" class="btn btn-danger ">
+                        <span><i class="fa bi-folder2-open"></i>Publish</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/utility/assets/js/post/post.js"></script>
     <script src="https://kit.fontawesome.com/ae3393d1fa.js" crossorigin="anonymous"></script>
@@ -355,6 +381,40 @@
     <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
     <script src="~/utility/assets/js/RichText/Index.js"></script>
 
+    <script src="https://cdn.tiny.cloud/1/cqjmaf90tbpe67jvb5m5pnc6qndbmyq6ozddc2ydwwsck4s2/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+
+    <script>
+        tinymce.init({
+            selector: '#mytextarea',
+            plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount linkchecker',
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+        });
+    </script>
+
+    <script type="text/javascript">
+
+        const isFileNo = document.getElementById('isFileNo');
+        const isFileYes = document.getElementById('isFileYes');
+        const newFile = document.getElementById('newFile');
+
+        isFileNo.addEventListener('change', function () {
+            newFile.style.display = this.checked ? 'none' : 'block';
+        });
+
+        isFileYes.addEventListener('change', function () {
+            newFile.style.display = this.checked ? 'block' : 'none';
+        });
+
+
+        $(document).ready(function () {
+            $('.slider').slick({
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                autoplay: true,
+                autoplaySpeed: 5000,
+            });
+        });
+    </script>
 </body>
 
 </html>

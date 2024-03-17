@@ -7,15 +7,25 @@
             <div class="latest_newsarea">
                 <span>Latest News</span>
                 <ul id="ticker01" class="news_sticker">
-                    @foreach (var post in Model.AllPosts.Where(p => p.IsActive == true))
-                    {
-                        <li>
-                            <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = post.PostId})">
-                                <img alt="Post Picture" src="~/Docs/@post.FirstFile"><span class="overlay"></span>
-                                @post.Title
-                            </a>
-                        </li>
+
+                    @{
+                        var lastestPost = Model.AllPosts
+                                        .Where(p => p.IsActive == true && p.IsPublished == true)
+                                        .Take(5)
+                                        .OrderByDescending(p => p.CreatedOn);
+
+                        foreach(var post in lastestPost)
+                        {
+                            <li>
+                                <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = post.PostId})">
+                                    <img alt="Post Picture" src="~/Docs/@post.FirstFile"><span class="overlay"></span>
+                                    @post.Title
+                                </a>
+                            </li>
+                        }
                     }
+
+                    
                 </ul>
                 <div class="social_area">
                     <ul class="social_nav">
@@ -27,21 +37,29 @@
         </div>
     </div>
 </section>
+
 <section id="sliderSection">
     <div class="row">
         <div class="col-lg-8 col-md-8 col-sm-8">
             <div class="slick_slider">
-                @foreach (var story in Model.AllPosts.Where(p => p.IsActive == true))
-                {
-                    <div class="single_iteam">
-                        <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = story.PostId})">
-                            <img alt="Post Picture" style="max-width: 100%; height: auto;" src="~/Docs/@story.FirstFile">
-                        </a>
-                        <div class="slider_article">
-                            <h2><a class="slider_tittle" href="@Url.Action("OnGetPostPublic", "Post", new { PostId = story.PostId})">@story.Title</a></h2>
+                @{
+                    var lastestNew = Model.AllPosts
+                                    .Where(p => p.IsActive == true && p.IsPublished == true && p.IsPublished == true)
+                                    .Take(5)
+                                    .OrderByDescending(p => p.CreatedOn);
+                    foreach (var story in lastestNew)
+                    {
+                        <div class="single_iteam">
+                            <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = story.PostId})">
+                                <img alt="Post Picture" style="max-width: 100%; height: auto;" src="~/Docs/@story.FirstFile">
+                            </a>
+                            <div class="slider_article">
+                                <h2><a class="slider_tittle" href="@Url.Action("OnGetPostPublic", "Post", new { PostId = story.PostId})">@story.Title</a></h2>
+                            </div>
                         </div>
-                    </div>
+                    }
                 }
+               
             </div>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-4">
@@ -51,21 +69,25 @@
 
                     <ul>
                         <li>
-                            @if (Model.AllPosts.Where(p => p.IsActive == true).Any())
+                            @if (Model.AllPosts.Any())
                             {
-                                var latestPosts = Model.AllPosts.Where(p => p.IsActive == true).OrderByDescending(p => p.CreatedOn).Take(5);
+                                var latestPosts = Model.AllPosts
+                                .Where(p => p.IsActive == true && p.IsPublished == true)
+                                .Take(5)
+                                .OrderByDescending(p => p.CreatedOn);
 
                                 foreach (var latestpost in latestPosts)
                                 {
-                                    <div class="media">
+                                    <div class="media wow fadeInDown">
                                         <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = latestpost.PostId })" class="media-left">
-                                            <img alt="Post Picture" src="~/Docs/@latestpost.FirstFile">
+                                            <img alt="" src="~/Docs/@latestpost.FirstFile">
                                         </a>
 
                                         <div class="media-body">
-                                            <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = latestpost.PostId })">@latestpost.Title</a>
+                                            <a class="catg_title" href="@Url.Action("OnGetPostPublic", "Post", new { PostId = latestpost.PostId })">@latestpost.Title</a>
                                         </div>
                                     </div>
+
                                 }
                             }
                             else
@@ -96,8 +118,10 @@
                         <ul class="business_catgnav  wow fadeInDown">
                             <li>
                                 @{
-                                    var latestPost = Model.AllPosts.Where(p => p.IsActive == true).OrderByDescending(p => p.CreatedOn)
-                                    .FirstOrDefault(p => p.Category == eCategory.Business);
+                                    var latestPost = Model.AllPosts
+                                                    .Where(p => p.IsActive == true && p.IsPublished == true)
+                                                    .OrderByDescending(p => p.CreatedOn)
+                                                    .FirstOrDefault(p => p.Category == eCategory.Business);
                                 }
 
                                 @if (latestPost != null)
@@ -132,21 +156,27 @@
                     <div class="single_post_content_right">
                         <ul class="spost_nav">
                             <li>
-                                @foreach (var item in Model.AllPosts.Where(p => p.IsActive == true).Take(4))
-                                {
-                                    if (item.Category == eCategory.Business)
+                                @{
+                                    var lastBusiness = Model.AllPosts
+                                                    .Where(p => p.IsActive == true && p.IsPublished == true)
+                                                    .Take(5)
+                                                    .OrderByDescending(p => p.CreatedOn);
+
+                                    foreach (var item in lastBusiness)
                                     {
-                                        <div class="media wow fadeInDown">
-                                            <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = item.PostId })" class="media-left">
-                                                <img alt="" src="~/Docs/@item.FirstFile"> <span class="overlay"></span>
-                                            </a>
+                                        if (item.Category == eCategory.Business)
+                                        {
+                                            <div class="media wow fadeInDown">
+                                                <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = item.PostId })" class="media-left">
+                                                    <img alt="Post Picture" src="~/Docs/@item.FirstFile"> <span class="overlay"></span>
+                                                </a>
 
-                                            <div class="media-body"> <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = item.PostId })" class="catg_title">@item.Title</a></div>
+                                                <div class="media-body"> <a href="@Url.Action("OnGetPostPublic", "Post", new { PostId = item.PostId })" class="catg_title">@item.Title</a></div>
 
-                                        </div>
+                                            </div>
+                                        }
                                     }
                                 }
-
                             </li>
 
                         </ul>
@@ -162,7 +192,8 @@
                             <ul class="business_catgnav wow fadeInDown">
                                 <li>
                                     @{
-                                        var latestPolitics = Model.AllPosts.Where(p => p.IsActive == true).OrderByDescending(p => p.CreatedOn)
+                                        var latestPolitics = Model.AllPosts
+                                        .Where(p => p.IsActive == true && p.IsPublished == true).OrderByDescending(p => p.CreatedOn)
                                         .FirstOrDefault(p => p.Category == eCategory.Politics);
                                     }
 
@@ -193,7 +224,7 @@
                             </ul>
                             <ul class="spost_nav">
                                 <li>
-                                    @foreach (var item in Model.AllPosts.Where(p => p.IsActive == true).Take(4))
+                                    @foreach (var item in Model.AllPosts.Where(p => p.IsActive == true && p.IsPublished == true).Take(4))
                                     {
                                         if (item.Category == eCategory.Politics)
                                         {
@@ -214,11 +245,13 @@
                     </div>
                     <div class="technology">
                         <div class="single_post_content">
-                            <h2><span>Sports</span></h2>
+                            <h2><span>Sport</span></h2>
                             <ul class="business_catgnav">
                                 <li>
                                     @{
-                                        var latestSport = Model.AllPosts.Where(p => p.IsActive == true).OrderByDescending(p => p.CreatedOn)
+                                        var latestSport = Model.AllPosts
+                                        .Where(p => p.IsActive == true && p.IsPublished == true)
+                                        .OrderByDescending(p => p.CreatedOn)
                                         .FirstOrDefault(p => p.Category == eCategory.Sports);
                                     }
 
@@ -250,7 +283,9 @@
                             </ul>
                             <ul class="spost_nav">
                                 <li>
-                                    @foreach (var item in Model.AllPosts.Where(p => p.IsActive == true).Take(4))
+                                    @foreach (var item in Model.AllPosts
+                                    .Where(p => p.IsActive == true && p.IsPublished == true)
+                                    .Take(4))
                                     {
                                         if (item.Category == eCategory.Sports)
                                         {

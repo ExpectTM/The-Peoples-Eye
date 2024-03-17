@@ -236,25 +236,7 @@
                                             <h5 class="card-title">Article</h5>
 
                                             <!-- Text Editor -->
-                                            @* <div class="cont">
-                                                <div id="editor" contenteditable="false">
-                                                    <section id="toolbar">
-                                                        <div id="bold" class="icon fa fa-bold"></div>
-                                                        <div id="italic" class="icon fa fa-italic"></div>
-                                                        <div id="createLink" class="icon fa fa-link"></div>
-                                                        <div id="insertUnorderedList" class="icon fa fa-list"></div>
-                                                        <div id="insertOrderedList" class="icon fa fa-list-ol"></div>
-                                                        <div id="justifyLeft" class="icon fa fa-align-left"></div>
-                                                        <div id="justifyRight" class="icon fa fa-align-right"></div>
-                                                        <div id="justifyCenter" class="icon fa fa-align-center"></div>
-                                                        <div id="justifyFull" class="icon fa fa-align-justify"></div>
-
-                                                    </section>
-
-                                                    <div id="page" contenteditable="true"></div>
-                                                </div>
-
-                                            </div> *@
+                                            
 
 
                                             @* <h5 class="card-title">Schedule Article</h5>
@@ -267,7 +249,11 @@
                                             </button> *@
 
                                             @* <textarea asp-for="Description"  hidden id="Description" name="Description" class="form-control mb-2" placeholder="News Title"></textarea> *@
-                                            <textarea asp-for="Description"  name="Description" class="form-control mb-2" rows="24" cols="50" placeholder="Article"></textarea>
+                                            @* <textarea asp-for="Description"  name="Description" class="form-control mb-2" rows="24" cols="50" placeholder="Article"></textarea>
+ *@
+                                            <textarea id="mytextarea" asp-for="Description" name="Description" class="form-control mb-2" placeholder="Article">
+
+                                            </textarea>
                                         </div>
                                     </div>
 
@@ -351,9 +337,22 @@
     <script src="https://kit.fontawesome.com/ae3393d1fa.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
-@*     <script src="~/utility/assets/js/RichText/Index.js"></script> *@
+
+    
+    <script src="https://cdn.tiny.cloud/1/cqjmaf90tbpe67jvb5m5pnc6qndbmyq6ozddc2ydwwsck4s2/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+
+    <script>
+        tinymce.init({
+            selector: '#mytextarea',
+            plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount linkchecker',
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+        });
+    </script>
+
+
     <script>
         $(document).ready(function () {
             $("#scheduleButton").click(function () {

@@ -40,6 +40,7 @@ namespace ForekBase.Infrastructure.Repository
         public INewsRepository News { get; private set; }
         public IPostRepository Post { get; private set; }
         public ICommentRepository Comment { get; private set; }
+        public ISubscriberRepository Subscriber { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UnitOfWork"/> class.
@@ -53,6 +54,7 @@ namespace ForekBase.Infrastructure.Repository
             News = new NewsRepository(_db);
             Post = new PostRepository(_db);
             Comment = new CommentRepository(_db);
+            Subscriber = new SubscriberRepository(_db);
         }
 
         /// <summary>

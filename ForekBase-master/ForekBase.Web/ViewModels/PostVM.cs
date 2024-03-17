@@ -17,8 +17,8 @@ namespace ForekBase.Web.ViewModels
         public eCategory Category { get; set; }
         public DateTime PublicationDate { get; set; }
         public bool IsPublished { get; set; } = false;
-        public string ImageDescription_1 { get; set; }
-        public string ImageSource_1 { get; set; }
+        public string? ImageDescription_1 { get; set; }
+        public string? ImageSource_1 { get; set; }
 
 #nullable enable
 
